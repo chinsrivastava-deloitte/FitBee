@@ -5,11 +5,9 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
-import javax.persistence.Embeddable;
-import javax.persistence.Embedded;
-import javax.persistence.Entity;
-import javax.persistence.Id;
+import javax.persistence.*;
 import java.util.Date;
+import java.util.List;
 
 @AllArgsConstructor
 @NoArgsConstructor
@@ -28,6 +26,10 @@ public class Doctor {
     private Qualification qualification;
     @Embedded
     private Research research;
+    @OneToOne
+    private User user;
+    @OneToMany(targetEntity = Appointment.class)
+    private List<Appointment> appointments;
 
 }
 
