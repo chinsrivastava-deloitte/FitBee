@@ -5,9 +5,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
-import javax.persistence.Entity;
-import javax.persistence.Id;
-import javax.persistence.OneToMany;
+import javax.persistence.*;
 import java.util.List;
 
 @AllArgsConstructor
@@ -15,13 +13,27 @@ import java.util.List;
 @Getter
 @Setter
 @Entity
+@Table(name = "Patient")
 public class Patient {
 
     @Id
+    @GeneratedValue(strategy = GenerationType.AUTO)
+    @Column(name = "Patient_ID")
     private int patientId;
+    @Column(name = "First_Name")
     private String firstName;
+    @Column(name = "Last_Name")
     private String lastName;
+    @Column(name = "Address")
     private String address;
+    @Column(name = "Gender")
     private String gender;
+    @Column(name = "Bed_ID")
+    private int bedId;
 
+    @OneToOne
+    private User user;
+
+    @OneToMany(targetEntity = Appointment.class)
+    private List<Appointment> appointments;
 }

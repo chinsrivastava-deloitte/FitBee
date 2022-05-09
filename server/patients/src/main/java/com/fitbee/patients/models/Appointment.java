@@ -5,10 +5,8 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
-import javax.persistence.Entity;
-import javax.persistence.Id;
-import javax.persistence.Temporal;
-import javax.persistence.TemporalType;
+import javax.persistence.*;
+import java.time.LocalTime;
 import java.util.Date;
 
 @AllArgsConstructor
@@ -19,12 +17,17 @@ import java.util.Date;
 public class Appointment {
 
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "Appointment_ID")
     private long appointmentId;
     @Temporal(TemporalType.DATE)
+    @Column(name = "Date")
     private Date date;
     @Temporal(TemporalType.TIME)
+    @Column(name = "Start_Time")
     private Date startTime;
     @Temporal(TemporalType.TIME)
+    @Column(name = "End_Time")
     private Date endTime;
 
 }
