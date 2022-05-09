@@ -5,11 +5,8 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
-import javax.persistence.Embeddable;
-import javax.persistence.Embedded;
-import javax.persistence.Entity;
-import javax.persistence.Id;
-import java.util.Date;
+import javax.persistence.*;
+
 
 @AllArgsConstructor
 @NoArgsConstructor
@@ -19,7 +16,10 @@ import java.util.Date;
 public class Doctor {
 
     @Id
-    private long doctorId;
+    @GeneratedValue(strategy = GenerationType.AUTO)
+    //@Column(name = "Doctor_ID")
+    private int doctorId;
+    // @Column(name = "Name")
     private String name;
     private int experience;
     private String expertise;
