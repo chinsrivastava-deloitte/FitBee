@@ -8,6 +8,7 @@ import lombok.Setter;
 import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.OneToMany;
+import javax.persistence.OneToOne;
 import java.util.List;
 
 @AllArgsConstructor
@@ -25,4 +26,9 @@ public class Patient {
     private String gender;
     private int bedId;
 
+    @OneToOne
+    private User user;
+
+    @OneToMany(targetEntity = Appointment.class)
+    private List<Appointment> appointments;
 }
