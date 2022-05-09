@@ -14,13 +14,20 @@ import java.util.List;
 @Getter
 @Setter
 @Entity
+@Table
 public class Doctor {
 
     @Id
-    private long doctorId;
+    @GeneratedValue(strategy = GenerationType.AUTO)
+    //@Column(name = "Doctor_ID")
+    private int doctorId;
+   // @Column(name = "Name")
     private String name;
+   // @Column(name = "Years_of_Experience")
     private int experience;
+   // @Column(name = "Specialisation")
     private String expertise;
+    //@Column(name = "Verified")
     private Boolean isVerified;
     @Embedded
     private Qualification qualification;
