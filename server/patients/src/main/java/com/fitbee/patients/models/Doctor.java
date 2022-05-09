@@ -20,10 +20,13 @@ public class Doctor {
     @GeneratedValue(strategy = GenerationType.AUTO)
     //@Column(name = "Doctor_ID")
     private int doctorId;
-    // @Column(name = "Name")
+   // @Column(name = "Name")
     private String name;
+   // @Column(name = "Years_of_Experience")
     private int experience;
+   // @Column(name = "Specialisation")
     private String expertise;
+    //@Column(name = "Verified")
     private Boolean isVerified;
     @Embedded
     private Qualification qualification;
