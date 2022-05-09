@@ -23,5 +23,6 @@ public class Patient {
     private String lastName;
     private String address;
     private String gender;
+    private int bedId;
 
 }
