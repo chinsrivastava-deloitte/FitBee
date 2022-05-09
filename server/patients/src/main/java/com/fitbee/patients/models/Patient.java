@@ -17,9 +17,9 @@ import java.util.List;
 public class Patient {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @GeneratedValue(strategy = GenerationType.AUTO)
     @Column(name = "Patient_ID")
-    private long patientId;
+    private int patientId;
     @Column(name = "First_Name")
     private String firstName;
     @Column(name = "Last_Name")
