@@ -18,7 +18,7 @@ import java.util.List;
 public class Patient {
 
     @Id
-    private long patientId;
+    private int patientId;
     private String firstName;
     private String lastName;
     private String address;

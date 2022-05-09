@@ -5,10 +5,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
-import javax.persistence.Entity;
-import javax.persistence.Id;
-import javax.persistence.Temporal;
-import javax.persistence.TemporalType;
+import javax.persistence.*;
 import java.util.Date;
 
 @AllArgsConstructor
@@ -19,6 +16,7 @@ import java.util.Date;
 public class User {
 
     @Id
+    @GeneratedValue(strategy=GenerationType.AUTO)
     private long userId;
     private String userName;
     private String password;
