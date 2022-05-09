@@ -31,6 +31,7 @@ public class Patient {
     private String address;
     @Column(name = "Gender")
     private String gender;
+    private int bedId;
     @Column(name = "Bed_ID")
     private int bedId;
 
