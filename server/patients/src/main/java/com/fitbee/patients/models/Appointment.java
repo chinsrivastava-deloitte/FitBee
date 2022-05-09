@@ -14,6 +14,7 @@ import java.util.Date;
 @Getter
 @Setter
 @Entity
+@Table
 public class Appointment {
 
     @Id
