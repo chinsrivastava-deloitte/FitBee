@@ -6,9 +6,6 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import javax.persistence.*;
-import javax.persistence.Id;
-import javax.persistence.OneToMany;
-import javax.persistence.OneToOne;
 import java.util.List;
 
 @AllArgsConstructor
@@ -22,7 +19,9 @@ public class Patient {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     @Column(name = "Patient_ID")
-    private int patientId;
+    private long patientId;
+
+
     @Column(name = "First_Name")
     private String firstName;
     @Column(name = "Last_Name")
@@ -31,9 +30,9 @@ public class Patient {
     private String address;
     @Column(name = "Gender")
     private String gender;
-    private int bedId;
     @Column(name = "Bed_ID")
     private int bedId;
+
 
     @OneToOne
     private User user;
