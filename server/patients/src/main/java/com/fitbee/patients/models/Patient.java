@@ -19,9 +19,7 @@ public class Patient {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     @Column(name = "Patient_ID")
-    private long patientId;
-
-
+    private int patientId;
     @Column(name = "First_Name")
     private String firstName;
     @Column(name = "Last_Name")
@@ -32,7 +30,6 @@ public class Patient {
     private String gender;
     @Column(name = "Bed_ID")
     private int bedId;
-
 
     @OneToOne
     private User user;
