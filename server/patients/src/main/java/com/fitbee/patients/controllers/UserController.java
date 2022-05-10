@@ -70,10 +70,10 @@ public class UserController {
     public void addUser(@RequestBody User user){
         userServiceImpl.addUser(user);
     }
-    /*@RequestMapping(value="/get/{name}",method=RequestMethod.GET)
-    public User getone(@PathVariable String name){
-        User user=userRepository.findByUserName(name);
-        return user;
-    }*/
+
+    @GetMapping("/get/{name}")
+    public User getOneUser(@PathVariable String name){
+        return userServiceImpl.getSingleUser(name);
+    }
 
 }
