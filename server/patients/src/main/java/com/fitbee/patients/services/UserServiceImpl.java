@@ -19,4 +19,9 @@ public class UserServiceImpl implements UserService{
         user.setPassword(passwordEncoder.encode(user.getPassword()));
         userRepository.save(user);
     }
+
+    public User getSingleUser(String name){
+        User user=userRepository.findByUserName((name));
+        return user;
+    }
 }
