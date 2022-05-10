@@ -5,7 +5,8 @@ import com.fitbee.patients.models.Jwt.JwtRequest;
 import com.fitbee.patients.models.Jwt.JwtResponse;
 import com.fitbee.patients.models.User;
 import com.fitbee.patients.repositories.CustomUserDetailsService;
-import com.fitbee.patients.repositories.UserRepository;
+import com.fitbee.patients.services.UserServiceImpl;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -16,10 +17,12 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
+@Slf4j
 public class UserController {
 
     @Autowired
     AuthenticationManager authenticationManager;
+
     @Autowired
     JwtUtils jwtUtils;
 
@@ -27,15 +30,21 @@ public class UserController {
     CustomUserDetailsService customUserDetailsService;
 
     @Autowired
-    UserRepository userRepository;
+    UserServiceImpl userServiceImpl;
 
-    @RequestMapping(value = "/authenticate", method = RequestMethod.POST)
+    /**
+     *
+     * @param authenticationRequest
+     * @return
+     * @throws Exception
+     */
+   @PostMapping("/authenticate")
     public ResponseEntity<?> createAuthenticationToken(@RequestBody JwtRequest authenticationRequest) throws Exception {
-
-        authenticate(authenticationRequest.getUsername(), authenticationRequest.getPassword());
+        log.info("authenticate endpoint called with parameters");
+        authenticate(authenticationRequest.getEmail(), authenticationRequest.getPassword());
 
         final UserDetails userDetails = customUserDetailsService
-                .loadUserByUsername(authenticationRequest.getUsername());
+                .loadUserByUsername(authenticationRequest.getEmail());
 
         final String token = jwtUtils.generateJwtToken(userDetails);
 
@@ -59,12 +68,12 @@ public class UserController {
 
     @PostMapping(value="/add")
     public void addUser(@RequestBody User user){
-        userRepository.save(user);
+        userServiceImpl.addUser(user);
     }
-    @RequestMapping(value="/get/{name}",method=RequestMethod.GET)
-    public User getone(@PathVariable String name){
-        User user=userRepository.findByUserName(name);
-        return user;
+
+    @GetMapping("/get/{name}")
+    public User getOneUser(@PathVariable String name){
+        return userServiceImpl.getSingleUser(name);
     }
 
 }
