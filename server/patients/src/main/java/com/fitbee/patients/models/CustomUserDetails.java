@@ -19,7 +19,7 @@ public class CustomUserDetails implements UserDetails {
 
     public CustomUserDetails(String name,String email,String password,Collection<? extends GrantedAuthority> authorities) {
         //this.id=id;
-        this.name=name;
+        this.name=email;
         this.email=email;
         this.password=password;
         this.authorities = authorities;
