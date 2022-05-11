@@ -13,5 +13,8 @@ public interface PatientService {
     public abstract void deletePatient(int id);
     public abstract Collection<Patient> getPatients();
     public abstract Patient getPatientByID(int id);
+
+ 
     public abstract List<CaseHistoryDto>getUserCaseHistory(String firstName);
+
 }
