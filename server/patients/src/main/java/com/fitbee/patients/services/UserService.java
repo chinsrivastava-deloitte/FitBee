@@ -7,3 +7,4 @@ public interface UserService {
     public void addUser(User user);
     public User getSingleUser(String name);
 }
+

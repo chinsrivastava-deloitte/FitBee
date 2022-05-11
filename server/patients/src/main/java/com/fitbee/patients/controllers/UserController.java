@@ -38,7 +38,9 @@ public class UserController {
      * @return
      * @throws Exception
      */
-   @PostMapping("/authenticate")
+
+    @PostMapping("/authenticate")
+
     public ResponseEntity<?> createAuthenticationToken(@RequestBody JwtRequest authenticationRequest) throws Exception {
         log.info("authenticate endpoint called with parameters");
         authenticate(authenticationRequest.getEmail(), authenticationRequest.getPassword());
