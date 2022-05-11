@@ -24,6 +24,11 @@ public class PatientController {
     public ResponseEntity<Object> getPatientByID(@PathVariable("id") int id) {
         return new ResponseEntity<>(patientService.getPatientByID(id), HttpStatus.OK);
     }
+//    @GetMapping(value="/patient/{name}")
+//    public ResponseEntity<Object> getPatientByID(@PathVariable("name") String name) {
+//        return new ResponseEntity<>(patientService.getPatientByName(name), HttpStatus.OK);
+//    }
+
 
     @PutMapping(value = "/patients/{id}")
     public ResponseEntity<Object> updatePatient(@PathVariable("id") int id, @RequestBody Patient patient) {

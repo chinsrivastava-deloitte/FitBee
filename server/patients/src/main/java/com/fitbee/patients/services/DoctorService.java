@@ -11,4 +11,5 @@ public interface DoctorService {
     public abstract void deleteDoctor(int id);
     public abstract Collection<Doctor> getDoctors();
     public abstract Doctor getDoctorByID(int id);
+    //public abstract Doctor getDoctorByName(String name);
 }
