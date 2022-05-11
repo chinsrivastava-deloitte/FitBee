@@ -1,5 +1,7 @@
 package com.fitbee.patients.models;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -20,9 +22,9 @@ public class Patient {
     @GeneratedValue(strategy = GenerationType.AUTO)
     @Column(name = "Patient_ID")
     private int patientId;
-    @Column(name = "First_Name")
+    @Column(name = "FirstName")
     private String firstName;
-    @Column(name = "Last_Name")
+    @Column(name = "LastName")
     private String lastName;
     @Column(name = "Address")
     private String address;
@@ -33,7 +35,12 @@ public class Patient {
 
     @OneToOne
     private User user;
-
-    @OneToMany(targetEntity = Appointment.class)
+    //@JsonManagedReference
+    @OneToMany(mappedBy = "patient",targetEntity = Appointment.class)
     private List<Appointment> appointments;
+
+
+//    @OneToMany
+//    @JoinColumn()
+//    private List<Appointment> appointments;
 }
