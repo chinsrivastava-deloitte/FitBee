@@ -13,10 +13,11 @@ import java.util.Date;
 @Getter
 @Setter
 @Entity
+@Table
 public class User {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @GeneratedValue(strategy = GenerationType.AUTO)
     @Column(name = "User_Id")
     private long userId;
     @Column(name = "Username")
@@ -28,7 +29,7 @@ public class User {
     @Temporal(TemporalType.DATE)
     @Column(name = "Date_Of_Birth")
     private Date dateOfBirth;
-    @Column(name = "Mobile_Number")
+    @Column(name = "Phone_Number")
     private int phoneNumber;
     @Column(name = "Role")
     private String role;

@@ -1,7 +1,9 @@
 package com.fitbee.patients.controllers;
 
+import com.fitbee.patients.models.Appointment;
 import com.fitbee.patients.models.Doctor;
 import com.fitbee.patients.models.Patient;
+import com.fitbee.patients.services.AppointmentService;
 import com.fitbee.patients.services.PatientService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -12,6 +14,8 @@ import org.springframework.web.bind.annotation.*;
 public class PatientController {
     @Autowired
     PatientService patientService;
+    @Autowired
+    AppointmentService appointmentService;
     @GetMapping(value = "/patients")
     public ResponseEntity<Object> getPatients() {
         return new ResponseEntity<>(patientService.getPatients(), HttpStatus.OK);
@@ -35,5 +39,10 @@ public class PatientController {
     public ResponseEntity<Object> createPatient(@RequestBody Patient patient) {
         patientService.createPatient(patient);
         return new ResponseEntity<>("Patient is created successfully", HttpStatus.CREATED);
+    }
+    @PostMapping(value="/patients/{name}/appointment")
+    public ResponseEntity<Object> scheduleAppointment(@PathVariable("name") String name,@RequestBody Appointment appointment){
+        appointmentService.addAppointment(appointment,name);
+        return new ResponseEntity<>("appointment added",HttpStatus.CREATED);
     }
 }
