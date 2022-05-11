@@ -40,7 +40,7 @@ public class Appointment {
     private String prescription;
     @Column(name="Doctor_name")
     private String doctorName;
-   // @JsonBackReference
+    // @JsonBackReference
 
     @ManyToOne(fetch = FetchType.LAZY)
     private Doctor doctor;

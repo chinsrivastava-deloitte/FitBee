@@ -1,5 +1,6 @@
 package com.fitbee.patients.models;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import lombok.AllArgsConstructor;
@@ -36,6 +37,7 @@ public class Patient {
     @OneToOne
     private User user;
     //@JsonManagedReference
+    @JsonIgnore
     @OneToMany(mappedBy = "patient",targetEntity = Appointment.class)
     private List<Appointment> appointments;
 
