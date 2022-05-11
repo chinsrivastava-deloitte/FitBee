@@ -1,9 +1,13 @@
 package com.fitbee.patients.models;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import org.springframework.security.core.parameters.P;
+import org.springframework.security.crypto.password.PasswordEncoder;
 
 import javax.persistence.*;
 import java.time.LocalTime;
@@ -14,7 +18,7 @@ import java.util.Date;
 @Getter
 @Setter
 @Entity
-@Table
+@Table(name="appointment")
 public class Appointment {
 
     @Id
@@ -30,5 +34,18 @@ public class Appointment {
     @Temporal(TemporalType.TIME)
     @Column(name = "End_Time")
     private Date endTime;
+    @Column(name="Diagnosis")
+    private String diagnosis;
+    @Column(name = "Prescription")
+    private String prescription;
+    @Column(name="Doctor_name")
+    private String doctorName;
+   // @JsonBackReference
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    private Doctor doctor;
+   // @JsonBackReference
+    @ManyToOne(fetch = FetchType.LAZY)
+    private Patient patient;
 
 }
