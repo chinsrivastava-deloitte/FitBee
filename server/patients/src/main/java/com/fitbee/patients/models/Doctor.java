@@ -40,6 +40,7 @@ public class Doctor {
     private User user;
     //@JsonManagedReference
 
+    @JsonIgnore
     @OneToMany(mappedBy = "doctor",targetEntity = Appointment.class)
     private List<Appointment> appointments;
 

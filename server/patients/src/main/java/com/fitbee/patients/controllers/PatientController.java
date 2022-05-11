@@ -50,4 +50,10 @@ public class PatientController {
         appointmentService.addAppointment(appointment,name);
         return new ResponseEntity<>("appointment added",HttpStatus.CREATED);
     }
+
+    @GetMapping("/caseHistory/{patientName}")
+    public ResponseEntity<Object> getCaseHistory(@PathVariable("patientName") String patientName){
+        return new ResponseEntity<>(patientService.getUserCaseHistory(patientName),HttpStatus.OK);
+    }
+
 }
