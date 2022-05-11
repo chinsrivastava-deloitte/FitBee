@@ -50,6 +50,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
         httpSecurity.csrf().disable()
                 .authorizeRequests().antMatchers("/authenticate").permitAll()
                 .antMatchers("/add").permitAll()
+
                 .antMatchers("/get/{name}").permitAll()
                 .antMatchers("/patients/{name}/appointment").permitAll()
                 .antMatchers("/patients").permitAll()
@@ -57,6 +58,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .antMatchers("/doctors").permitAll()
                 .antMatchers("/doctors/{id}").permitAll()
                 .antMatchers(AUTH_WHITELIST).permitAll()
+
                 .anyRequest().authenticated().and().
                 exceptionHandling().authenticationEntryPoint(jwtAuthenticationEntryPoint).and().sessionManagement()
                 .sessionCreationPolicy(SessionCreationPolicy.STATELESS);
@@ -77,4 +79,6 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     }
 
 
+
 }
+
