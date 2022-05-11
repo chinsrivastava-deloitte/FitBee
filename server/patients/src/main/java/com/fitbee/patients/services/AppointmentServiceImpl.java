@@ -17,12 +17,27 @@ public class AppointmentServiceImpl implements AppointmentService{
     PatientRepository patientRepository;
     @Autowired
     DoctorRepository doctorRepository;
+    @Autowired
+    DoctorService doctorService;
+    @Autowired
+    PatientService patientService;
     @Override
     public void addAppointment(Appointment appointment,String name) {
+        //fetch doctor and null pointer check
+        //fetch patient and null pointer check
+        //use java8 optional
+        //populate appointment fields
+        //add logs and custom exceptions ,java docs
+        //testcases
         Appointment newAppointment = new Appointment();
-        newAppointment.setDoctorName(appointment.getDoctorName());
-        newAppointment.setDoctor(getDoctorByName(appointment.getDoctorName()));
+      //  newAppointment.setDoctorName(appointment.getDoctorName());
+       // newAppointment.setDoctor(getDoctorByName(appointment.getDoctorName()));
+                //doctorService.getDoctorByName(appointment.getDoctorName()));
         newAppointment.setPatient(getPatientByName(name));
+                //patientService.getPatientByName(name));
+        newAppointment.setDate(appointment.getDate());
+        newAppointment.setStartTime(appointment.getStartTime());
+        newAppointment.setEndTime(appointment.getEndTime());
         appointmentRepository.save(newAppointment);
 
     }
@@ -32,4 +47,6 @@ public class AppointmentServiceImpl implements AppointmentService{
     public Patient getPatientByName(String firstName){
         return patientRepository.findByFirstName(firstName);
     }
+
+
 }

@@ -50,6 +50,7 @@ public class PatientServiceImpl implements PatientService{
         return patientRepository.findById(id).get();
     }
 
+
     @Override
     public List<CaseHistoryDto> getUserCaseHistory(String firstName){
 
@@ -66,5 +67,6 @@ public class PatientServiceImpl implements PatientService{
         caseHistoryDto.setDate(appointment.getDate());
         return caseHistoryDto;
     }
+
 
 }
