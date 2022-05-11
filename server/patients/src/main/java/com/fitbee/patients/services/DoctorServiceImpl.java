@@ -45,6 +45,9 @@ public class DoctorServiceImpl implements DoctorService{
     @Override
     public Doctor getDoctorByID(int id) {
             return doctorRepository.findById(id).get();
-
     }
+//    @Override
+//    public Doctor getDoctorByName(String name){
+//        return doctorRepository.findByName(name);
+//    }
 }

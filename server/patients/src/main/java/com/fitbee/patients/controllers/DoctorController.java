@@ -19,7 +19,10 @@ public class DoctorController {
     public ResponseEntity<Object> getDoctorByID(@PathVariable("id") int id) {
         return new ResponseEntity<>(doctorService.getDoctorByID(id), HttpStatus.OK);
     }
-
+//    @GetMapping(value="/doctor/{name}")
+//    public ResponseEntity<Object> getDoctorByName(@PathVariable("name") String name){
+//        return new ResponseEntity<>(doctorService.getDoctorByName(name),HttpStatus.CREATED);
+//    }
     @PutMapping(value = "/doctors/{id}")
     public ResponseEntity<Object> updateDoctor(@PathVariable("id") int id, @RequestBody Doctor doctor) {
         doctorService.updateDoctor(id,doctor);
