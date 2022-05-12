@@ -1,5 +1,6 @@
 package com.fitbee.patients.controllers;
 
+import com.fitbee.patients.exceptions.IdNotFoundException;
 import com.fitbee.patients.models.Doctor;
 import com.fitbee.patients.services.DoctorService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,7 +18,13 @@ public class DoctorController {
     }
     @GetMapping(value="/doctors/{id}")
     public ResponseEntity<Object> getDoctorByID(@PathVariable("id") int id) {
-        return new ResponseEntity<>(doctorService.getDoctorByID(id), HttpStatus.OK);
+        try{
+            return new ResponseEntity<>(doctorService.getDoctorByID(id), HttpStatus.OK);
+        }
+        catch(IdNotFoundException e){
+            return new ResponseEntity<>(e.getMessage(),HttpStatus.BAD_REQUEST);
+        }
+
     }
 //    @GetMapping(value="/doctor/{name}")
 //    public ResponseEntity<Object> getDoctorByName(@PathVariable("name") String name){
@@ -25,13 +32,27 @@ public class DoctorController {
 //    }
     @PutMapping(value = "/doctors/{id}")
     public ResponseEntity<Object> updateDoctor(@PathVariable("id") int id, @RequestBody Doctor doctor) {
-        doctorService.updateDoctor(id,doctor);
-        return new ResponseEntity<>("Doctor is updated successfully", HttpStatus.OK);
+        try{
+            doctorService.updateDoctor(id,doctor);
+            return new ResponseEntity<>("Doctor is updated successfully", HttpStatus.OK);
+        }
+        catch (IdNotFoundException e)
+        {
+            return new ResponseEntity<>(e.getMessage(),HttpStatus.BAD_REQUEST);
+        }
+
     }
     @DeleteMapping(value = "/doctors/{id}")
     public ResponseEntity<Object> deleteDoctor(@PathVariable("id") int id) {
-        doctorService.deleteDoctor(id);
-        return new ResponseEntity<>("Doctor is deleted successfully", HttpStatus.OK);
+        try{
+            doctorService.deleteDoctor(id);
+            return new ResponseEntity<>("Doctor is deleted successfully", HttpStatus.OK);
+        }
+        catch(IdNotFoundException e)
+        {
+            return new ResponseEntity<>(e.getMessage(),HttpStatus.BAD_REQUEST);
+        }
+
     }
     @PostMapping(value = "/doctors")
     public ResponseEntity<Object> createProduct(@RequestBody Doctor doctor) {

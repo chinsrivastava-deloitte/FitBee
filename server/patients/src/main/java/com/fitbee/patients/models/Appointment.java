@@ -3,6 +3,7 @@ package com.fitbee.patients.models;
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fitbee.patients.models.enums.AppointmentEnum;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -39,9 +40,9 @@ public class Appointment {
     private String diagnosis;
     @Column(name = "Prescription")
     private String prescription;
-    //enum for appointment status (number)
-//    @Column(name="Doctor_name")
-//    private String doctorName;
+    //enum for appointment status (number)(-1,0,1)
+    private AppointmentEnum appointmentStatus;
+    private String appointmentType;
    // @JsonBackReference
     @JsonIgnore
     @ManyToOne(fetch = FetchType.LAZY)
