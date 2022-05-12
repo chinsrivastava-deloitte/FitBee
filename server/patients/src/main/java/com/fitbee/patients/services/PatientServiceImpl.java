@@ -1,5 +1,6 @@
 package com.fitbee.patients.services;
 
+import com.fitbee.patients.exceptions.IdNotFoundException;
 import com.fitbee.patients.models.Appointment;
 import com.fitbee.patients.models.Doctor;
 import com.fitbee.patients.models.Patient;
@@ -25,29 +26,44 @@ public class PatientServiceImpl implements PatientService{
     }
 
     @Override
-    public void updatePatient(int id, Patient patient) {
-        Patient newP = patientRepository.findById(id).get();
-        newP.setAddress(patient.getAddress());
-        newP.setBedId(patient.getBedId());
-        newP.setFirstName(patient.getFirstName());
-        newP.setLastName(patient.getLastName());
-        newP.setGender(patient.getGender());
-        patientRepository.save(newP);
+    public void updatePatient(int id, Patient patient) throws IdNotFoundException {
+        //find patient by user id if present update else add
+        //fetch user by id
+
+        if(patientRepository.findById(id).isPresent()) {
+            Patient newP = patientRepository.findById(id).get();
+            newP.setAddress(patient.getAddress());
+            newP.setBedId(patient.getBedId());
+            newP.setFirstName(patient.getFirstName());
+            newP.setLastName(patient.getLastName());
+            newP.setGender(patient.getGender());
+            patientRepository.save(newP);
+        }
+        else
+            throw new IdNotFoundException("id not present in database");
     }
 
     @Override
-    public void deletePatient(int id) {
-        patientRepository.deleteById(id);
+    public void deletePatient(Integer id) throws IdNotFoundException {
+        if(id==null)
+            throw new IdNotFoundException("id cannot be null");
+        if(patientRepository.findById(id).isPresent())
+            patientRepository.deleteById(id);
+        else
+            throw new IdNotFoundException("id not present in database");
     }
 
     @Override
-    public Collection<Patient> getPatients() {
+    public List<Patient> getPatients() {
         return patientRepository.findAll();
     }
 
     @Override
-    public Patient getPatientByID(int id) {
-        return patientRepository.findById(id).get();
+    public Patient getPatientByID(int id) throws IdNotFoundException {
+        if(patientRepository.findById(id).isPresent())
+            return patientRepository.findById(id).get();
+        else
+            throw new IdNotFoundException("id not present in database");
     }
 
 

@@ -34,10 +34,11 @@ public class Patient {
     @Column(name = "Bed_ID")
     private int bedId;
 
-    @OneToOne
+    @OneToOne(cascade = CascadeType.PERSIST)
+    //@JoinColumn(name="user_id")
     private User user;
     //@JsonManagedReference
-    @JsonIgnore
+    //@JsonIgnore
     @OneToMany(mappedBy = "patient",targetEntity = Appointment.class)
     private List<Appointment> appointments;
 
