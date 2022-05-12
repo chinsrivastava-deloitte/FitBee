@@ -14,6 +14,7 @@ public interface PatientService {
     public abstract void deletePatient(Integer id) throws IdNotFoundException;
     public abstract Collection<Patient> getPatients();
     public abstract Patient getPatientByID(int id) throws IdNotFoundException;
+    public abstract int  fetchPatientByUser(int userId);
 
  
     public abstract List<CaseHistoryDto>getUserCaseHistory(String firstName);
