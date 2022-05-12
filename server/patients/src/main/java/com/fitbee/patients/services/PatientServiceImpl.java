@@ -88,8 +88,8 @@ public class PatientServiceImpl implements PatientService{
         return caseHistoryDto;
     }
     public int fetchPatientByUser(int userId){
-        if(patientRepository.existsByUserUserId(userId))
-            return patientRepository.findByUserUserId(userId).getPatientId();
+        if(patientRepository.existsByUserUserId((long)userId))
+            return patientRepository.findByUserUserId((long)userId).getPatientId();
         else
             return -1;
     }
