@@ -34,7 +34,8 @@ public class Patient {
     @Column(name = "Bed_ID")
     private int bedId;
 
-    @OneToOne
+    @OneToOne(cascade = CascadeType.PERSIST)
+    //@JoinColumn(name="user_id")
     private User user;
     //@JsonManagedReference
     //@JsonIgnore

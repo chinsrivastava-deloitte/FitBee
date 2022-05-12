@@ -4,10 +4,7 @@ import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fitbee.patients.models.enums.AppointmentEnum;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 import org.springframework.security.core.parameters.P;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
@@ -20,13 +17,14 @@ import java.util.Date;
 @Getter
 @Setter
 @Entity
+@Builder
 @Table(name="appointment")
 public class Appointment {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "Appointment_ID")
-    private long appointmentId;
+    private int appointmentId;
     @Temporal(TemporalType.DATE)
     @Column(name = "Date")
     private Date date;
@@ -51,5 +49,6 @@ public class Appointment {
     @JsonIgnore
     @ManyToOne(fetch = FetchType.LAZY)
     private Patient patient;
+    //private enum appointmentType;
 
 }

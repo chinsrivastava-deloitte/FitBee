@@ -27,6 +27,9 @@ public class PatientServiceImpl implements PatientService{
 
     @Override
     public void updatePatient(int id, Patient patient) throws IdNotFoundException {
+        //find patient by user id if present update else add
+        //fetch user by id
+
         if(patientRepository.findById(id).isPresent()) {
             Patient newP = patientRepository.findById(id).get();
             newP.setAddress(patient.getAddress());
@@ -51,7 +54,7 @@ public class PatientServiceImpl implements PatientService{
     }
 
     @Override
-    public Collection<Patient> getPatients() {
+    public List<Patient> getPatients() {
         return patientRepository.findAll();
     }
 
