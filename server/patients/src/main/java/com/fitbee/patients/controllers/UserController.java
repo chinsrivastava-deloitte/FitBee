@@ -79,8 +79,8 @@ public class UserController {
     }
 
     @GetMapping("/getUserId/{email}")
-    public void getIdByEmail(@PathVariable String email){
-        userServiceImpl.getUserId(email);
+    public long getIdByEmail(@PathVariable String email){
+        return userServiceImpl.getUserId(email);
     }
 
 }

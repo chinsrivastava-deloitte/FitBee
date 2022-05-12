@@ -102,7 +102,6 @@ public class PatientController {
     }
     @GetMapping("/patientsByUser/{userId}")
     public ResponseEntity<Object> getPatientByUserId(@PathVariable int userId){
-        patientService.fetchPatientByUser(userId);
-        return new ResponseEntity<>(appointmentService.getAppointments(),HttpStatus.OK);
+        return new ResponseEntity<>(patientService.fetchPatientByUser(userId),HttpStatus.OK);
     }
 }
