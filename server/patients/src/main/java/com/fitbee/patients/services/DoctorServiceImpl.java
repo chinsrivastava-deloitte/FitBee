@@ -79,6 +79,7 @@ public class DoctorServiceImpl implements DoctorService{
         Appointment appointment=appointmentRepository.findById(prescriptionDto.getAppointmentId()).get();
         appointment.setDiagnosis(prescriptionDto.getDiagnosis());
         appointment.setPrescription(prescriptionDto.getPrescription());
+        appointment.setAppointmentType(prescriptionDto.getAppointmentType());
         appointmentRepository.save(appointment);
 
     }
