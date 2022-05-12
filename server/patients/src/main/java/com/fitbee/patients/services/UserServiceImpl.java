@@ -25,5 +25,10 @@ public class UserServiceImpl implements UserService{
         return user;
     }
 
+    public long getUserId(String email){
+        User user=userRepository.findByEmail(email);
+        return user.getUserId();
+    }
+
 }
 
