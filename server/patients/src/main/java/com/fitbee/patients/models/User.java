@@ -33,6 +33,9 @@ public class User {
     private int phoneNumber;
     @Column(name = "Role")
     private String role;
+   /*@OneToOne(mappedBy="user",cascade = CascadeType.ALL,fetch = FetchType.LAZY)
+    private Patient patient;*/
+
 
 
 }
