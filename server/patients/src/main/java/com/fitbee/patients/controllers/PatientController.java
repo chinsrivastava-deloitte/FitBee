@@ -40,6 +40,7 @@ public class PatientController {
 
 
     @PutMapping(value = "/patients/{id}")
+    //patientdto = userid, patientdetails
     public ResponseEntity<Object> updatePatient(@PathVariable("id") int id, @RequestBody Patient patient) {
         try{
             patientService.updatePatient(id, patient);

@@ -1,8 +1,12 @@
 package com.fitbee.patients.services;
 
 import com.fitbee.patients.exceptions.IdNotFoundException;
+import com.fitbee.patients.models.Appointment;
 import com.fitbee.patients.models.Doctor;
+import com.fitbee.patients.repositories.AppointmentRepository;
 import com.fitbee.patients.repositories.DoctorRepository;
+import com.fitbee.patients.repositories.PatientRepository;
+import com.fitbee.patients.utils.dto.PrescriptionDto;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -15,6 +19,12 @@ import java.util.Optional;
 public class DoctorServiceImpl implements DoctorService{
     @Autowired
     DoctorRepository doctorRepository;
+
+    @Autowired
+    PatientRepository patientRepository;
+
+    @Autowired
+    AppointmentRepository appointmentRepository;
 
     @Override
     public void createDoctor(Doctor doctor) {
@@ -63,4 +73,14 @@ public class DoctorServiceImpl implements DoctorService{
 //    public Doctor getDoctorByName(String name){
 //        return doctorRepository.findByName(name);
 //    }
+    @Override
+    public void addPrescription(PrescriptionDto prescriptionDto){
+
+        Appointment appointment=appointmentRepository.findById(prescriptionDto.getAppointmentId()).get();
+        appointment.setDiagnosis(prescriptionDto.getDiagnosis());
+        appointment.setPrescription(prescriptionDto.getPrescription());
+        appointmentRepository.save(appointment);
+
+    }
+
 }

@@ -3,6 +3,7 @@ package com.fitbee.patients.controllers;
 import com.fitbee.patients.exceptions.IdNotFoundException;
 import com.fitbee.patients.models.Doctor;
 import com.fitbee.patients.services.DoctorService;
+import com.fitbee.patients.utils.dto.PrescriptionDto;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -58,6 +59,12 @@ public class DoctorController {
     public ResponseEntity<Object> createProduct(@RequestBody Doctor doctor) {
         doctorService.createDoctor(doctor);
         return new ResponseEntity<>("Doctor is created successfully", HttpStatus.CREATED);
+    }
+
+    @PostMapping("/Prescribe")
+    public ResponseEntity<Object>createPrescription(@RequestBody PrescriptionDto prescriptionDto){
+        doctorService.addPrescription(prescriptionDto);
+        return new ResponseEntity<Object>("successfully added prescription",HttpStatus.OK);
     }
 
 }
