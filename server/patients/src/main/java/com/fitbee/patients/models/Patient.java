@@ -37,7 +37,7 @@ public class Patient {
     @OneToOne
     private User user;
     //@JsonManagedReference
-    @JsonIgnore
+    //@JsonIgnore
     @OneToMany(mappedBy = "patient",targetEntity = Appointment.class)
     private List<Appointment> appointments;
 
