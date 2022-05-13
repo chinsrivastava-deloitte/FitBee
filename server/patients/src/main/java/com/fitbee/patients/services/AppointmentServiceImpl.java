@@ -12,15 +12,17 @@ import com.fitbee.patients.repositories.DoctorRepository;
 import com.fitbee.patients.repositories.PatientRepository;
 import com.fitbee.patients.utils.dto.AppointmentDto;
 import com.fitbee.patients.utils.dto.CaseHistoryDto;
+import com.fitbee.patients.utils.dto.PreviousAppointmentDto;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.stream.Collectors;
 
 @Service
-public class AppointmentServiceImpl implements AppointmentService{
+public class AppointmentServiceImpl implements AppointmentService {
     @Autowired
     AppointmentRepository appointmentRepository;
     @Autowired
@@ -35,11 +37,11 @@ public class AppointmentServiceImpl implements AppointmentService{
     @Override
     public void addAppointment(AppointmentDto appointmentDto) throws IdNotFoundException, DateException {
         Appointment appointment = new Appointment();
-        if(doctorRepository.existsById(appointmentDto.getDoctorId()))
+        if (doctorRepository.existsById(appointmentDto.getDoctorId()))
             appointment.setDoctor(doctorRepository.findById(appointmentDto.getDoctorId()).get());
         else
             throw new IdNotFoundException("doctor's id not present in database");
-        if(patientRepository.existsById(appointmentDto.getPatientId()))
+        if (patientRepository.existsById(appointmentDto.getPatientId()))
             appointment.setPatient(patientRepository.findById(appointmentDto.getPatientId()).get());
         else
             throw new IdNotFoundException("patient's id not present in database");
@@ -53,17 +55,35 @@ public class AppointmentServiceImpl implements AppointmentService{
         appointment.setAppointmentStatus(AppointmentEnum.NOT_STARTED);
         appointmentRepository.save(appointment);
     }
+
     @Override
-    public List<Appointment> getAppointments(){
+    public List<Appointment> getAppointments() {
         return appointmentRepository.findAll();
     }
 
-    public Doctor getDoctorByName(String name){
+    public Doctor getDoctorByName(String name) {
         return doctorRepository.findByName(name);
     }
-    public Patient getPatientByName(String firstName){
+
+    public Patient getPatientByName(String firstName) {
         return patientRepository.findByFirstName(firstName);
     }
 
+    public List<PreviousAppointmentDto> getPreviousAppointments(int patientId) {
+        List<Appointment> appointmentList = patientRepository.findById(patientId).get().getAppointments();
+        List<PreviousAppointmentDto> previousAppointmentList = new ArrayList<>();
+        for (Appointment a : appointmentList) {
+            if (a.getAppointmentStatus() == AppointmentEnum.COMPLETED) {
+                PreviousAppointmentDto previousAppointmentDto = new PreviousAppointmentDto();
+                previousAppointmentDto.setDoctorName(a.getDoctor().getName());
+                previousAppointmentDto.setDate(a.getDate());
+                previousAppointmentDto.setTime(a.getStartTime());
+                previousAppointmentDto.setDescription(a.getAppointmentType());
+                previousAppointmentList.add(previousAppointmentDto);
+            }
 
+        }
+        return previousAppointmentList;
+
+    }
 }
