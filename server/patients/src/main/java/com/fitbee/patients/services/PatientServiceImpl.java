@@ -4,12 +4,14 @@ import com.fitbee.patients.exceptions.IdNotFoundException;
 import com.fitbee.patients.models.Appointment;
 import com.fitbee.patients.models.Doctor;
 import com.fitbee.patients.models.Patient;
+import com.fitbee.patients.models.User;
 import com.fitbee.patients.repositories.AppointmentRepository;
 import com.fitbee.patients.repositories.PatientRepository;
 import com.fitbee.patients.repositories.UserRepository;
 import com.fitbee.patients.utils.dto.CaseHistoryDto;
 import com.fitbee.patients.utils.dto.PatientDto;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.parameters.P;
 import org.springframework.stereotype.Service;
 
 import java.util.Collection;
@@ -21,6 +23,8 @@ public class PatientServiceImpl implements PatientService{
     @Autowired
     PatientRepository patientRepository;
     @Autowired
+    UserRepository userRepository;
+    @Autowired
     AppointmentRepository appointmentRepository;
     @Autowired
     UserRepository userRepository;
@@ -29,23 +33,37 @@ public class PatientServiceImpl implements PatientService{
         patientRepository.save(patient);
     }
 
-    @Override
-    public void updatePatient(int id, Patient patient) throws IdNotFoundException {
+   /* @Override
+    public void updatePatient(PatientDto patientDto)  {
         //find patient by user id if present update else add
         //fetch user by id
 
-        if(patientRepository.findById(id).isPresent()) {
-            Patient newP = patientRepository.findById(id).get();
-            newP.setAddress(patient.getAddress());
-            newP.setBedId(patient.getBedId());
-            newP.setFirstName(patient.getFirstName());
-            newP.setLastName(patient.getLastName());
-            newP.setGender(patient.getGender());
-            patientRepository.save(newP);
+        int userId = patientDto.getUserId();
+        User user = userRepository.findById(userId).get();
+
+        if (present) {
+            Patient patient = patientRepository.findByUser(user);
+            patient.setGender(patientDto.getGender());
+            patient.setFirstName(patientDto.getFirst_name());
+            patient.setLastName(patientDto.getLast_name());
+            patient.setAddress(patientDto.getAddress());
+            patientRepository.save(patient);
+        } else {
+            //adding first time
+            Patient patient = new Patient();
+            patient.setGender(patientDto.getGender());
+            patient.setFirstName(patientDto.getFirst_name());
+            patient.setLastName(patientDto.getLast_name());
+            patient.setAddress(patientDto.getAddress());
+            patient.setUser(user);
+            patientRepository.save(patient);
         }
-        else
-            throw new IdNotFoundException("id not present in database");
+
     }
+    public boolean check(User user){
+        int id = (int) user.getUserId();
+        if(patientRepository.findByUser(user).getUser().getUserId()
+    }*/
 
     @Override
     public void deletePatient(Integer id) throws IdNotFoundException {

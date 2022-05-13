@@ -4,6 +4,7 @@ import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fitbee.patients.models.enums.AppointmentEnum;
+import com.fitbee.patients.models.enums.AppointmentType;
 import lombok.*;
 import org.springframework.security.core.parameters.P;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -40,7 +41,7 @@ public class Appointment {
     private String prescription;
     //enum for appointment status (number)(-1,0,1)
     private AppointmentEnum appointmentStatus;
-    private String appointmentType;
+    private AppointmentType appointmentType;
    // @JsonBackReference
     @JsonIgnore
     @ManyToOne(fetch = FetchType.LAZY)

@@ -6,6 +6,7 @@ import com.fitbee.patients.models.Appointment;
 import com.fitbee.patients.models.Doctor;
 import com.fitbee.patients.models.Patient;
 import com.fitbee.patients.models.enums.AppointmentEnum;
+import com.fitbee.patients.models.enums.AppointmentType;
 import com.fitbee.patients.repositories.AppointmentRepository;
 import com.fitbee.patients.repositories.DoctorRepository;
 import com.fitbee.patients.repositories.PatientRepository;
@@ -48,7 +49,7 @@ public class AppointmentServiceImpl implements AppointmentService{
         appointment.setDate(appointmentDto.getDate());
         appointment.setStartTime(appointmentDto.getStartTime());
         appointment.setEndTime(appointmentDto.getEndTime());
-        appointment.setAppointmentType(appointmentDto.getType());
+        appointment.setAppointmentType(AppointmentType.REGULAR);
         appointment.setAppointmentStatus(AppointmentEnum.NOT_STARTED);
         appointmentRepository.save(appointment);
     }
