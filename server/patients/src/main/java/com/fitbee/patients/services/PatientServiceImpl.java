@@ -6,7 +6,9 @@ import com.fitbee.patients.models.Doctor;
 import com.fitbee.patients.models.Patient;
 import com.fitbee.patients.repositories.AppointmentRepository;
 import com.fitbee.patients.repositories.PatientRepository;
+import com.fitbee.patients.repositories.UserRepository;
 import com.fitbee.patients.utils.dto.CaseHistoryDto;
+import com.fitbee.patients.utils.dto.PatientDto;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -20,6 +22,8 @@ public class PatientServiceImpl implements PatientService{
     PatientRepository patientRepository;
     @Autowired
     AppointmentRepository appointmentRepository;
+    @Autowired
+    UserRepository userRepository;
     @Override
     public void createPatient(Patient patient) {
         patientRepository.save(patient);
@@ -82,6 +86,22 @@ public class PatientServiceImpl implements PatientService{
         caseHistoryDto.setPrescription(appointment.getPrescription());
         caseHistoryDto.setDate(appointment.getDate());
         return caseHistoryDto;
+    }
+    public int fetchPatientByUser(int userId){
+        if(patientRepository.existsByUserUserId((long)userId))
+            return patientRepository.findByUserUserId((long)userId).getPatientId();
+        else
+            return -1;
+    }
+
+    public void addPatient(PatientDto patientDto){
+        Patient patient=new Patient();
+        patient.setFirstName(patientDto.getFirst_name());
+        patient.setLastName(patientDto.getLast_name());
+        patient.setAddress(patientDto.getAddress());
+        patient.setGender(patientDto.getGender());
+        patient.setUser(userRepository.findById(patientDto.getUserId()).get());
+        patientRepository.save(patient);
     }
 
 

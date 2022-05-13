@@ -8,6 +8,7 @@ import com.fitbee.patients.models.Patient;
 import com.fitbee.patients.services.AppointmentService;
 import com.fitbee.patients.services.PatientService;
 import com.fitbee.patients.utils.dto.AppointmentDto;
+import com.fitbee.patients.utils.dto.PatientDto;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -67,6 +68,10 @@ public class PatientController {
         patientService.createPatient(patient);
         return new ResponseEntity<>("Patient is created successfully", HttpStatus.CREATED);
     }
+    @PostMapping("/createPatients")
+    public ResponseEntity<Object> addPatient(@RequestBody PatientDto patientDto){
+        return new ResponseEntity<>("Patient is created successfully", HttpStatus.CREATED);
+    }
 //    @PostMapping(value="/patients/{name}/appointment")
 //    public ResponseEntity<Object> scheduleAppointment(@PathVariable("name") String name,@RequestBody Appointment appointment){
 //        appointmentService.addAppointment(appointment,name);
@@ -94,5 +99,9 @@ public class PatientController {
     @GetMapping("/getAppointments")
     public ResponseEntity<Object> getAppointments(){
         return new ResponseEntity<>(appointmentService.getAppointments(),HttpStatus.OK);
+    }
+    @GetMapping("/patientsByUser/{userId}")
+    public ResponseEntity<Object> getPatientByUserId(@PathVariable int userId){
+        return new ResponseEntity<>(patientService.fetchPatientByUser(userId),HttpStatus.OK);
     }
 }
