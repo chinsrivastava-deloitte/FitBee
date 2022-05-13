@@ -3,6 +3,7 @@ package com.fitbee.patients.services;
 import com.fitbee.patients.exceptions.IdNotFoundException;
 import com.fitbee.patients.models.Appointment;
 import com.fitbee.patients.models.Doctor;
+import com.fitbee.patients.models.enums.AppointmentEnum;
 import com.fitbee.patients.repositories.AppointmentRepository;
 import com.fitbee.patients.repositories.DoctorRepository;
 import com.fitbee.patients.repositories.PatientRepository;
@@ -82,6 +83,13 @@ public class DoctorServiceImpl implements DoctorService{
         appointment.setAppointmentType(prescriptionDto.getAppointmentType());
         appointmentRepository.save(appointment);
 
+    }
+    
+    @Override
+    public void appointmentCheckout(int appointmentId){
+        Appointment appointment=appointmentRepository.getById(appointmentId);
+        appointment.setAppointmentStatus(AppointmentEnum.COMPLETED);
+        appointmentRepository.save(appointment);
     }
 
 }
