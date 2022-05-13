@@ -26,44 +26,28 @@ public class PatientServiceImpl implements PatientService{
     UserRepository userRepository;
     @Autowired
     AppointmentRepository appointmentRepository;
-    @Autowired
-    UserRepository userRepository;
+
     @Override
     public void createPatient(Patient patient) {
         patientRepository.save(patient);
     }
 
-   /* @Override
+    @Override
     public void updatePatient(PatientDto patientDto)  {
-        //find patient by user id if present update else add
-        //fetch user by id
-
-        int userId = patientDto.getUserId();
-        User user = userRepository.findById(userId).get();
-
-        if (present) {
-            Patient patient = patientRepository.findByUser(user);
+            int userId = patientDto.getUserId();
+            int patientID = patientRepository.findByUserUserId((long)userId).getPatientId();
+            Patient patient = patientRepository.findById(patientID).get();
             patient.setGender(patientDto.getGender());
             patient.setFirstName(patientDto.getFirst_name());
             patient.setLastName(patientDto.getLast_name());
             patient.setAddress(patientDto.getAddress());
             patientRepository.save(patient);
-        } else {
-            //adding first time
-            Patient patient = new Patient();
-            patient.setGender(patientDto.getGender());
-            patient.setFirstName(patientDto.getFirst_name());
-            patient.setLastName(patientDto.getLast_name());
-            patient.setAddress(patientDto.getAddress());
-            patient.setUser(user);
-            patientRepository.save(patient);
-        }
 
     }
-    public boolean check(User user){
-        int id = (int) user.getUserId();
-        if(patientRepository.findByUser(user).getUser().getUserId()
-    }*/
+//    public boolean check(User user){
+//        int id = (int) user.getUserId();
+//        if(patientRepository.findByUser(user).getUser().getUserId()
+//    }
 
     @Override
     public void deletePatient(Integer id) throws IdNotFoundException {
@@ -118,8 +102,9 @@ public class PatientServiceImpl implements PatientService{
         patient.setLastName(patientDto.getLast_name());
         patient.setAddress(patientDto.getAddress());
         patient.setGender(patientDto.getGender());
-        patient.setUser(userRepository.findById(patientDto.getUserId()).get());
+        patient.setUser(userRepository.findByUserId((long)patientDto.getUserId()));
         patientRepository.save(patient);
+
     }
 
 

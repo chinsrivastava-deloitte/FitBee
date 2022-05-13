@@ -4,6 +4,7 @@ import com.fitbee.patients.exceptions.DateException;
 import com.fitbee.patients.exceptions.IdNotFoundException;
 import com.fitbee.patients.models.Appointment;
 import com.fitbee.patients.utils.dto.AppointmentDto;
+import com.fitbee.patients.utils.dto.PreviousAppointmentDto;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -12,4 +13,7 @@ import java.util.List;
 public interface AppointmentService {
     public abstract void addAppointment(AppointmentDto appointmentDto) throws IdNotFoundException, DateException;
     public abstract List<Appointment> getAppointments();
+    public abstract List<PreviousAppointmentDto> getPreviousAppointments(int patientId);
 }
+// previous appointment
+// upcoming appointment

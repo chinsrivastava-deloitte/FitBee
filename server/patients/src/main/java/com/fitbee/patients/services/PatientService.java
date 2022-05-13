@@ -11,7 +11,7 @@ import java.util.List;
 
 public interface PatientService {
     public abstract void createPatient(Patient patient);
-  //  public abstract void updatePatient(int id, Patient patient) throws IdNotFoundException;
+     public abstract void updatePatient(PatientDto patientDto);
     public abstract void deletePatient(Integer id) throws IdNotFoundException;
     public abstract Collection<Patient> getPatients();
     public abstract Patient getPatientByID(int id) throws IdNotFoundException;
