@@ -15,4 +15,5 @@ public interface DoctorService {
     public abstract Doctor getDoctorByID(int id) throws IdNotFoundException;
     //public abstract Doctor getDoctorByName(String name);
     public abstract void addPrescription(PrescriptionDto prescriptionDto);
+    public abstract void appointmentCheckout(int appointmentId);
 }

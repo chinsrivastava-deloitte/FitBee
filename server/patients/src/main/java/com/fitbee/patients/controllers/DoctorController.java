@@ -66,5 +66,10 @@ public class DoctorController {
         doctorService.addPrescription(prescriptionDto);
         return new ResponseEntity<Object>("successfully added prescription",HttpStatus.OK);
     }
+    @GetMapping("/patientCheckout/{appointmentId}")
+    public ResponseEntity<Object> checkoutPatient(@PathVariable int appointmentId){
+        doctorService.appointmentCheckout(appointmentId);
+        return new ResponseEntity<Object>("successfully checked out patient",HttpStatus.OK);
+    }
 
 }
