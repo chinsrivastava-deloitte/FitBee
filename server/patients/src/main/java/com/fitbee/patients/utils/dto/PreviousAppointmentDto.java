@@ -11,5 +11,6 @@ public class PreviousAppointmentDto {
     private String doctorName;
     private Date date;
     private Date time;
-    private AppointmentType description;
+   // private AppointmentType description;
+    private String description;
 }

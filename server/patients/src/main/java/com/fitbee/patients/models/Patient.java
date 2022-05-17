@@ -41,6 +41,11 @@ public class Patient {
     //@JsonIgnore
     @OneToMany(mappedBy = "patient",targetEntity = Appointment.class)
     private List<Appointment> appointments;
+    @Column(name="height")
+    private float height;
+    @Column(name="weight")
+    private float weight;
+
 
 
 //    @OneToMany

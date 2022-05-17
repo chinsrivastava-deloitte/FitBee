@@ -51,5 +51,7 @@ public class Appointment {
     @ManyToOne(fetch = FetchType.LAZY)
     private Patient patient;
     //private enum appointmentType;
+    @Column(name= "description")
+    private String description;
 
 }

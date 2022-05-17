@@ -40,6 +40,8 @@ public class PatientServiceImpl implements PatientService{
             patient.setGender(patientDto.getGender());
             patient.setFirstName(patientDto.getFirst_name());
             patient.setLastName(patientDto.getLast_name());
+            patient.setHeight(patientDto.getHeight());
+            patient.setWeight(patientDto.getWeight());
             patient.setAddress(patientDto.getAddress());
             patientRepository.save(patient);
 
@@ -102,6 +104,8 @@ public class PatientServiceImpl implements PatientService{
         patient.setLastName(patientDto.getLast_name());
         patient.setAddress(patientDto.getAddress());
         patient.setGender(patientDto.getGender());
+        patient.setHeight(patientDto.getHeight());
+        patient.setWeight(patientDto.getWeight());
         patient.setUser(userRepository.findByUserId((long)patientDto.getUserId()));
         patientRepository.save(patient);
 

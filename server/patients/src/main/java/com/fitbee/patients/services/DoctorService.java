@@ -16,4 +16,5 @@ public interface DoctorService {
     //public abstract Doctor getDoctorByName(String name);
     public abstract void addPrescription(PrescriptionDto prescriptionDto);
     public abstract void appointmentCheckout(int appointmentId);
+    public abstract void setPatientStatus(int appointmentId,String status);
 }

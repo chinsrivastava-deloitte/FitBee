@@ -14,6 +14,7 @@ public interface AppointmentService {
     public abstract void addAppointment(AppointmentDto appointmentDto) throws IdNotFoundException, DateException;
     public abstract List<Appointment> getAppointments();
     public abstract List<PreviousAppointmentDto> getPreviousAppointments(int patientId);
+    public abstract List<PreviousAppointmentDto>getAllAppointmentsDto(int patientId);
 }
 // previous appointment
 // upcoming appointment

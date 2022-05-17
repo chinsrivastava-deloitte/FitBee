@@ -11,4 +11,6 @@ public class PatientDto {
     private String last_name;
     private String address;
     private String gender;
+    private float height;
+    private float weight;
 }
