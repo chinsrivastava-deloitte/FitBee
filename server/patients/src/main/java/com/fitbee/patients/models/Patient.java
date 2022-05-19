@@ -48,6 +48,7 @@ public class Patient {
 
 
 
+
 //    @OneToMany
 //    @JoinColumn()
 //    private List<Appointment> appointments;

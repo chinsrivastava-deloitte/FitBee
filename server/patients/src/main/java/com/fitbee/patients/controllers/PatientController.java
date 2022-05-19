@@ -12,6 +12,7 @@ import com.fitbee.patients.utils.dto.PatientDto;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.stereotype.Repository;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
@@ -82,15 +83,16 @@ public class PatientController {
 
     @PostMapping("/addAppointments")
     public ResponseEntity<Object> addAppointment(@RequestBody AppointmentDto appointmentDto) {
-        try {
-            appointmentService.addAppointment(appointmentDto);
+            appointmentService.addappointment(appointmentDto);
             return new ResponseEntity<>("appointment added", HttpStatus.CREATED);
-        } catch (IdNotFoundException e) {
-            return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
-        } catch (DateException e) {
-            return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
-        }
-
+    }
+    @GetMapping("/getAllSlots")
+    public ResponseEntity<Object> getSlots(){
+        return new ResponseEntity<>(appointmentService.getAllSlots(),HttpStatus.OK);
+    }
+    @GetMapping("/getDoctorSlots")
+    public ResponseEntity<Object> getDoctorSlots(){
+        return new ResponseEntity<>(appointmentService.getDoctorSlots(),HttpStatus.OK);
     }
 
     @GetMapping("/getAppointments")
