@@ -45,6 +45,7 @@ public class AppointmentServiceImpl implements AppointmentService {
     PatientService patientService;
     @Autowired
     ApptRepository apptRepository;
+    @Autowired
     EmailConfig emailConfig;
     @Autowired
     JavaMailSender javaMailSender;
@@ -140,6 +141,8 @@ public class AppointmentServiceImpl implements AppointmentService {
 
     @Override
     public void cancelAppointment(AppointmentDto appointmentDto) {
+
+    }
 
     public List<PreviousAppointmentDto>getAllAppointmentsDto(int patientId){
         List<Appointment> appointmentList = patientRepository.findById(patientId).get().getAppointments();
