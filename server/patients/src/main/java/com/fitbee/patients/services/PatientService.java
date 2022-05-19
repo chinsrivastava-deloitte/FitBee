@@ -18,6 +18,6 @@ public interface PatientService {
     public abstract int  fetchPatientByUser(int userId);
     public abstract void addPatient(PatientDto patientDto);
  
-    public abstract List<CaseHistoryDto>getUserCaseHistory(String firstName);
+    public abstract List<CaseHistoryDto>getUserCaseHistory(int patientId);
 
 }

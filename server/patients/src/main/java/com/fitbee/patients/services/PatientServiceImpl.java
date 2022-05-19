@@ -5,6 +5,7 @@ import com.fitbee.patients.models.Appointment;
 import com.fitbee.patients.models.Doctor;
 import com.fitbee.patients.models.Patient;
 import com.fitbee.patients.models.User;
+import com.fitbee.patients.models.enums.AppointmentEnum;
 import com.fitbee.patients.repositories.AppointmentRepository;
 import com.fitbee.patients.repositories.PatientRepository;
 import com.fitbee.patients.repositories.UserRepository;
@@ -76,10 +77,11 @@ public class PatientServiceImpl implements PatientService{
 
 
     @Override
-    public List<CaseHistoryDto> getUserCaseHistory(String firstName){
+    public List<CaseHistoryDto> getUserCaseHistory(int patientId){
 
-        List<Appointment>patientAppointments=patientRepository.findByFirstName(firstName).getAppointments();
-        return patientAppointments.stream().map(this::convertCaseHistoryDto).collect(Collectors.toList());
+        List<Appointment>patientAppointments=patientRepository.findById(patientId).get().getAppointments();
+        return patientAppointments.stream().filter(appointment->appointment.getAppointmentStatus()== AppointmentEnum.COMPLETED)
+                .map(this::convertCaseHistoryDto).collect(Collectors.toList());
 
     };
 
