@@ -66,18 +66,18 @@ public class AppointmentServiceImpl implements AppointmentService {
 //        if(appointmentDto.getDate().compareTo(java.time.LocalDate.now()){
 //            throw new DateException(" entered date must be more than current date");
 //        }
-        appointment.setDate(appointmentDto.getDate());
+       /* appointment.setDate(appointmentDto.getDate());
         appointment.setStartTime(appointmentDto.getStartTime());
-        appointment.setEndTime(appointmentDto.getEndTime());
+        appointment.setEndTime(appointmentDto.getEndTime());*/
         appointment.setAppointmentType(AppointmentType.REGULAR);
         appointment.setAppointmentStatus(AppointmentEnum.NOT_STARTED);
         appointment.setDescription(appointmentDto.getType());
         appointmentRepository.save(appointment);
-        sendMail(appointmentDto);
+        //sendMail(appointmentDto);
     }
     @Override
     public void addappointment(AppointmentDto appointmentDto){
-        Appt appt = new Appt();
+        /*Appt appt = new Appt();
         appt.setPatient(patientRepository.findById(appointmentDto.getPatientId()).get());
         Date d = appointmentDto.getDate();
         Date st = appointmentDto.getStartTime();
@@ -89,7 +89,20 @@ public class AppointmentServiceImpl implements AppointmentService {
         appt.setDoctorSlot(ds);
         ds.setIsOccupied(SlotStatus.OCCUPIED);
         doctorSlotRepository.save(ds);
-        apptRepository.save(appt);
+        apptRepository.save(appt);*/
+        Appointment appointment = new Appointment();
+        appointment.setPatient(patientRepository.findById(appointmentDto.getPatientId()).get());
+        Slot slot = slotRepository.findById(appointmentDto.getSlotId()).get();
+        Doctor doctor =doctorRepository.findById(appointmentDto.getDoctorId()).get();
+        DoctorSlot doctorSlot=doctorSlotRepository.findBySlotAndDoctor(slot,doctor);
+        appointment.setDoctorSlot(doctorSlot);
+        appointment.setDoctor(doctor);
+        doctorSlot.setIsOccupied(SlotStatus.OCCUPIED);
+        appointment.setAppointmentType(AppointmentType.REGULAR);
+        appointment.setAppointmentStatus(AppointmentEnum.NOT_STARTED);
+        appointment.setDescription(appointmentDto.getType());
+        doctorSlotRepository.save(doctorSlot);
+        appointmentRepository.save(appointment);
 
     }
     public List<Slot> getAllSlots(){
@@ -118,8 +131,8 @@ public class AppointmentServiceImpl implements AppointmentService {
             if (a.getAppointmentStatus() == AppointmentEnum.COMPLETED) {
                 PreviousAppointmentDto previousAppointmentDto = new PreviousAppointmentDto();
                 previousAppointmentDto.setDoctorName(a.getDoctor().getName());
-                previousAppointmentDto.setDate(a.getDate());
-                previousAppointmentDto.setTime(a.getStartTime());
+                previousAppointmentDto.setDate(a.getDoctorSlot().getSlot().getDate());
+                previousAppointmentDto.setTime(a.getDoctorSlot().getSlot().getFromTime());
                 //previousAppointmentDto.setDescription(a.getAppointmentType());
                 previousAppointmentDto.setDescription(a.getDescription());
                 previousAppointmentList.add(previousAppointmentDto);
@@ -132,19 +145,19 @@ public class AppointmentServiceImpl implements AppointmentService {
 
     @Override
     public void rescheduleAppointment(RescheduleDto rescheduleDto) {
-        Appointment a = appointmentRepository.findById(rescheduleDto.getAppointmentId()).get();
+        /*Appointment a = appointmentRepository.findById(rescheduleDto.getAppointmentId()).get();
         a.setStartTime(rescheduleDto.getStartTime());
         a.setEndTime(rescheduleDto.getEndTime());
         a.setDate(rescheduleDto.getDate());
-        appointmentRepository.save(a);
+        appointmentRepository.save(a);*/
 
-        /*Appt appointment= apptRepository.findById(rescheduleDto.getAppointmentId()).get();
+        Appointment appointment= appointmentRepository.findById(rescheduleDto.getAppointmentId()).get();
         Slot slot=slotRepository.findById(rescheduleDto.getSlotId()).get();
         DoctorSlot doctorSlot= appointment.getDoctorSlot();
         doctorSlot.setIsOccupied(SlotStatus.BLOCKED);
         appointment.getDoctorSlot().setSlot(slot);
         doctorSlotRepository.save(doctorSlot);
-        apptRepository.save(appointment);*/
+        appointmentRepository.save(appointment);
     }
     @Override
     public void cancelAppointment(RescheduleDto rescheduleDto) {
@@ -161,9 +174,10 @@ public class AppointmentServiceImpl implements AppointmentService {
         for (Appointment a : appointmentList) {
             PreviousAppointmentDto previousAppointmentDto = new PreviousAppointmentDto();
             previousAppointmentDto.setDoctorName(a.getDoctor().getName());
-            previousAppointmentDto.setDate(a.getDate());
-            previousAppointmentDto.setTime(a.getStartTime());
+            previousAppointmentDto.setDate(a.getDoctorSlot().getSlot().getDate());
+            previousAppointmentDto.setTime(a.getDoctorSlot().getSlot().getFromTime());
             previousAppointmentDto.setDescription(a.getDescription());
+            previousAppointmentDto.setAppointmentStatus(a.getAppointmentStatus());
             previousAppointmentList.add(previousAppointmentDto);
 
         }
@@ -175,7 +189,8 @@ public class AppointmentServiceImpl implements AppointmentService {
         EmailDto emailDto = new EmailDto();
         emailDto.setEmail(patientRepository.findById(patientId).get().getUser().getEmail());
         emailDto.setName(patientRepository.findById(patientId).get().getUser().getUserName());
-        emailDto.setMessageBody("This is to confirm that your appointment have been scheduled at"+appointmentDto.getDate()+"from"+appointmentDto.getStartTime()+"with"
+        Slot slot=slotRepository.findById(appointmentDto.getSlotId()).get();
+        emailDto.setMessageBody("This is to confirm that your appointment have been scheduled at "+slot.getDate()+" from "+slot.getFromTime()+" with "
                                 +doctorRepository.findById(appointmentDto.getDoctorId()).get().getName());
         JavaMailSenderImpl mailSender = new JavaMailSenderImpl();
         mailSender.setHost(emailConfig.getHost());

@@ -90,7 +90,7 @@ public class PatientServiceImpl implements PatientService{
         caseHistoryDto.setDoctorName(appointment.getDoctor().getName());
         caseHistoryDto.setDiagnosis(appointment.getDiagnosis());
         caseHistoryDto.setPrescription(appointment.getPrescription());
-        caseHistoryDto.setDate(appointment.getDate());
+        caseHistoryDto.setDate(appointment.getDoctorSlot().getSlot().getDate());
         return caseHistoryDto;
     }
     public int fetchPatientByUser(int userId){
