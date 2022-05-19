@@ -2,24 +2,21 @@ package com.fitbee.patients.services;
 
 import com.fitbee.patients.exceptions.DateException;
 import com.fitbee.patients.exceptions.IdNotFoundException;
-import com.fitbee.patients.models.Appointment;
-import com.fitbee.patients.models.Doctor;
-import com.fitbee.patients.models.Patient;
+import com.fitbee.patients.models.*;
 import com.fitbee.patients.models.enums.AppointmentEnum;
 import com.fitbee.patients.models.enums.AppointmentType;
-import com.fitbee.patients.repositories.AppointmentRepository;
-import com.fitbee.patients.repositories.DoctorRepository;
-import com.fitbee.patients.repositories.PatientRepository;
+import com.fitbee.patients.models.enums.SlotStatus;
+import com.fitbee.patients.repositories.*;
 import com.fitbee.patients.utils.dto.AppointmentDto;
-import com.fitbee.patients.utils.dto.CaseHistoryDto;
 import com.fitbee.patients.utils.dto.PreviousAppointmentDto;
+import com.fitbee.patients.utils.dto.RescheduleDto;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
 
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
-import java.util.stream.Collectors;
 
 @Service
 public class AppointmentServiceImpl implements AppointmentService {
@@ -30,9 +27,15 @@ public class AppointmentServiceImpl implements AppointmentService {
     @Autowired
     DoctorRepository doctorRepository;
     @Autowired
+    DoctorSlotRepository doctorSlotRepository;
+    @Autowired
+    SlotRepository slotRepository;
+    @Autowired
     DoctorService doctorService;
     @Autowired
     PatientService patientService;
+    @Autowired
+    ApptRepository apptRepository;
 
     @Override
     public void addAppointment(AppointmentDto appointmentDto) throws IdNotFoundException, DateException {
@@ -55,10 +58,31 @@ public class AppointmentServiceImpl implements AppointmentService {
         appointment.setAppointmentStatus(AppointmentEnum.NOT_STARTED);
         appointmentRepository.save(appointment);
     }
-
     @Override
-    public List<Appointment> getAppointments() {
-        return appointmentRepository.findAll();
+    public void addappointment(AppointmentDto appointmentDto){
+        Appt appt = new Appt();
+        appt.setPatient(patientRepository.findById(appointmentDto.getPatientId()).get());
+        Date d = appointmentDto.getDate();
+        Date st = appointmentDto.getStartTime();
+
+        Slot s = slotRepository.findByDateAndFromTime(d,st);
+        Doctor doctor = doctorRepository.findById(appointmentDto.getDoctorId()).get();
+        DoctorSlot ds = doctorSlotRepository.findBySlotAndDoctor(s,doctor);
+
+        appt.setDoctorSlot(ds);
+        ds.setIsOccupied(SlotStatus.OCCUPIED);
+        apptRepository.save(appt);
+
+    }
+    public List<Slot> getAllSlots(){
+        return slotRepository.findAll();
+    }
+    public List<DoctorSlot> getDoctorSlots(){
+        return doctorSlotRepository.findAll();
+    }
+    @Override
+    public List<Appt> getAppointments() {
+        return apptRepository.findAll();
     }
 
     public Doctor getDoctorByName(String name) {
@@ -84,6 +108,20 @@ public class AppointmentServiceImpl implements AppointmentService {
 
         }
         return previousAppointmentList;
+
+    }
+
+    @Override
+    public void rescheduleAppointment(RescheduleDto rescheduleDto) {
+        Appointment a = appointmentRepository.findById(rescheduleDto.getAppointmentId()).get();
+        a.setStartTime(rescheduleDto.getStartTime());
+        a.setEndTime(rescheduleDto.getEndTime());
+        a.setDate(rescheduleDto.getDate());
+        appointmentRepository.save(a);
+    }
+
+    @Override
+    public void cancelAppointment(AppointmentDto appointmentDto) {
 
     }
 }
