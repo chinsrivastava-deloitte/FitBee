@@ -71,6 +71,7 @@ public class AppointmentServiceImpl implements AppointmentService {
 
         appt.setDoctorSlot(ds);
         ds.setIsOccupied(SlotStatus.OCCUPIED);
+        doctorSlotRepository.save(ds);
         apptRepository.save(appt);
 
     }
