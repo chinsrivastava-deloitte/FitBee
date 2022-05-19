@@ -109,4 +109,9 @@ public class PatientController {
     public ResponseEntity<Object> getPreviousAppointment(@PathVariable int patientId) {
         return new ResponseEntity<>(appointmentService.getPreviousAppointments(patientId), HttpStatus.OK);
     }
+
+    @GetMapping("/getAllAppointments/{patientId}")
+    public ResponseEntity<Object> getAllAppointmentList(@PathVariable int patientId){
+        return new ResponseEntity<>(appointmentService.getAllAppointmentsDto(patientId),HttpStatus.OK);
+    }
 }
