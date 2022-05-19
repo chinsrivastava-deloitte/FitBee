@@ -137,11 +137,22 @@ public class AppointmentServiceImpl implements AppointmentService {
         a.setEndTime(rescheduleDto.getEndTime());
         a.setDate(rescheduleDto.getDate());
         appointmentRepository.save(a);
+
+        /*Appt appointment= apptRepository.findById(rescheduleDto.getAppointmentId()).get();
+        Slot slot=slotRepository.findById(rescheduleDto.getSlotId()).get();
+        DoctorSlot doctorSlot= appointment.getDoctorSlot();
+        doctorSlot.setIsOccupied(SlotStatus.BLOCKED);
+        appointment.getDoctorSlot().setSlot(slot);
+        doctorSlotRepository.save(doctorSlot);
+        apptRepository.save(appointment);*/
     }
-
     @Override
-    public void cancelAppointment(AppointmentDto appointmentDto) {
-
+    public void cancelAppointment(RescheduleDto rescheduleDto) {
+        Appt appointment=apptRepository.findById(rescheduleDto.getAppointmentId()).get();
+        DoctorSlot doctorSlot = appointment.getDoctorSlot();
+        doctorSlot.setIsOccupied(SlotStatus.BLOCKED);
+        apptRepository.deleteById(appointment.getId());
+        doctorSlotRepository.save(doctorSlot);
     }
 
     public List<PreviousAppointmentDto>getAllAppointmentsDto(int patientId){
