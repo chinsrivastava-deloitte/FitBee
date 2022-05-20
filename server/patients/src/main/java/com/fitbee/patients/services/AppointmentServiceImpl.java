@@ -103,6 +103,7 @@ public class AppointmentServiceImpl implements AppointmentService {
         appointment.setDescription(appointmentDto.getType());
         doctorSlotRepository.save(doctorSlot);
         appointmentRepository.save(appointment);
+       // sendMail(appointmentDto);
 
     }
     public List<Slot> getAllSlots(){

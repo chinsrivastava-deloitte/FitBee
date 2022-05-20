@@ -16,6 +16,7 @@ import org.springframework.stereotype.Repository;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
+@CrossOrigin(value="*")
 public class PatientController {
     @Autowired
     PatientService patientService;

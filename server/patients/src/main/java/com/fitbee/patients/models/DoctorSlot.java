@@ -1,5 +1,6 @@
 package com.fitbee.patients.models;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fitbee.patients.models.enums.SlotStatus;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -14,6 +15,7 @@ public class DoctorSlot {
     @Id
     @GeneratedValue
     private int id;
+    @JsonIgnore
     @OneToOne(cascade = CascadeType.PERSIST)
     private Doctor doctor;
 
