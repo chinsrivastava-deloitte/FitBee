@@ -26,7 +26,7 @@ public class Appointment {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "Appointment_ID")
     private int appointmentId;
-    @Temporal(TemporalType.DATE)
+   /* @Temporal(TemporalType.DATE)
     @Column(name = "Date")
     private Date date;
     @Temporal(TemporalType.TIME)
@@ -34,7 +34,7 @@ public class Appointment {
     private Date startTime;
     @Temporal(TemporalType.TIME)
     @Column(name = "End_Time")
-    private Date endTime;
+    private Date endTime;*/
     @Column(name="Diagnosis")
     private String diagnosis;
     @Column(name = "Prescription")
@@ -53,5 +53,7 @@ public class Appointment {
     //private enum appointmentType;
     @Column(name= "description")
     private String description;
+    @OneToOne
+    private DoctorSlot doctorSlot;
 
 }
