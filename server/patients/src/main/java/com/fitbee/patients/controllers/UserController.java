@@ -5,6 +5,7 @@ import com.fitbee.patients.models.Jwt.JwtRequest;
 import com.fitbee.patients.models.Jwt.JwtResponse;
 import com.fitbee.patients.models.User;
 import com.fitbee.patients.repositories.CustomUserDetailsService;
+import com.fitbee.patients.services.UserService;
 import com.fitbee.patients.services.UserServiceImpl;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -32,6 +33,8 @@ public class UserController {
 
     @Autowired
     UserServiceImpl userServiceImpl;
+    @Autowired
+    UserService userService;
 
     /**
      *
@@ -83,5 +86,6 @@ public class UserController {
     public long getIdByEmail(@PathVariable String email){
         return userServiceImpl.getUserId(email);
     }
+
 
 }

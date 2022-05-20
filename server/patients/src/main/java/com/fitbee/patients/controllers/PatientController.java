@@ -115,4 +115,12 @@ public class PatientController {
     public ResponseEntity<Object> getAllAppointmentList(@PathVariable int patientId){
         return new ResponseEntity<>(appointmentService.getAllAppointmentsDto(patientId),HttpStatus.OK);
     }
+    @GetMapping("/populateSlotTable")
+    public void populateSlot(){
+        patientService.populateSlot();
+    }
+    @GetMapping("/populateDoctorSlotTable")
+    public void populateDoctorSlotTable(){
+        patientService.populateDoctorSlotTable();
+    }
 }

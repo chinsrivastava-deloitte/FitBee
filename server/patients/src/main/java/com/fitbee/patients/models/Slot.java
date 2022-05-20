@@ -23,4 +23,9 @@ public class Slot {
     private Date fromTime;
     @Temporal(TemporalType.TIMESTAMP)
     private Date toTime;
+    public Slot(Date date,Date fromTime,Date toTime){
+        this.date=date;
+        this.fromTime=fromTime;
+        this.toTime = toTime;
+    }
 }

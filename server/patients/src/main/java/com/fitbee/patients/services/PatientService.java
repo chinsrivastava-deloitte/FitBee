@@ -20,4 +20,6 @@ public interface PatientService {
  
     public abstract List<CaseHistoryDto>getUserCaseHistory(int patientId);
 
+    public abstract void populateSlot();
+    public abstract void populateDoctorSlotTable();
 }

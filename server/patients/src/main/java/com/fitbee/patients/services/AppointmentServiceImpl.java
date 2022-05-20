@@ -205,4 +205,5 @@ public class AppointmentServiceImpl implements AppointmentService {
         mailMessage.setText(emailDto.getMessageBody());
         mailSender.send(mailMessage);
     }
+
 }

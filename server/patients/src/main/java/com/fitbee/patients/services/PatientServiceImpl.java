@@ -1,21 +1,22 @@
 package com.fitbee.patients.services;
 
 import com.fitbee.patients.exceptions.IdNotFoundException;
-import com.fitbee.patients.models.Appointment;
-import com.fitbee.patients.models.Doctor;
-import com.fitbee.patients.models.Patient;
-import com.fitbee.patients.models.User;
+import com.fitbee.patients.models.*;
 import com.fitbee.patients.models.enums.AppointmentEnum;
-import com.fitbee.patients.repositories.AppointmentRepository;
-import com.fitbee.patients.repositories.PatientRepository;
-import com.fitbee.patients.repositories.UserRepository;
+import com.fitbee.patients.models.enums.SlotStatus;
+import com.fitbee.patients.repositories.*;
 import com.fitbee.patients.utils.dto.CaseHistoryDto;
 import com.fitbee.patients.utils.dto.PatientDto;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.parameters.P;
 import org.springframework.stereotype.Service;
 
+import java.text.DateFormat;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Date;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -27,6 +28,12 @@ public class PatientServiceImpl implements PatientService{
     UserRepository userRepository;
     @Autowired
     AppointmentRepository appointmentRepository;
+    @Autowired
+    SlotRepository slotRepository;
+    @Autowired
+    DoctorRepository doctorRepository;
+    @Autowired
+    DoctorSlotRepository doctorSlotRepository;
 
     @Override
     public void createPatient(Patient patient) {
@@ -112,6 +119,74 @@ public class PatientServiceImpl implements PatientService{
         patientRepository.save(patient);
 
     }
+    public void populateSlot(){
+        DateFormat df  = new SimpleDateFormat("yyyy-MM-dd");
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:MM:ss");
+        Date d1,t1,t2;
+        List<Slot> slots = new ArrayList<>();
+        try{
+            d1= df.parse("2022-05-20");
+            t1=sdf.parse("2022-05-20 10:00:00");
+            t2=sdf.parse("2022-05-20 11:00:00");
+            Slot s1 = new Slot(d1,t1,t2);
+            slots.add(s1);
+            d1= df.parse("2022-05-20");
+            t1=sdf.parse("2022-05-20 11:00:00");
+            t2=sdf.parse("2022-05-20 12:00:00");
+            Slot s2 = new Slot(d1,t1,t2);
+            slots.add(s2);
+            d1= df.parse("2022-05-20");
+            t1=sdf.parse("2022-05-20 12:00:00");
+            t2=sdf.parse("2022-05-20 13:00:00");
+            Slot s3 = new Slot(d1,t1,t2);
+            slots.add(s3);
+            d1= df.parse("2022-05-20");
+            t1=sdf.parse("2022-05-20 13:00:00");
+            t2=sdf.parse("2022-05-20 14:00:00");
+            Slot s4 = new Slot(d1,t1,t2);
+            slots.add(s4);
+            d1= df.parse("2022-05-21");
+            t1=sdf.parse("2022-05-21 10:00:00");
+            t2=sdf.parse("2022-05-21 11:00:00");
+            Slot s5 = new Slot(d1,t1,t2);
+            slots.add(s5);
+            d1= df.parse("2022-05-21");
+            t1=sdf.parse("2022-05-21 11:00:00");
+            t2=sdf.parse("2022-05-21 12:00:00");
+            Slot s6 = new Slot(d1,t1,t2);
+            slots.add(s6);
+            d1= df.parse("2022-05-21");
+            t1=sdf.parse("2022-05-21 12:00:00");
+            t2=sdf.parse("2022-05-21 13:00:00");
+            Slot s7 = new Slot(d1,t1,t2);
+            slots.add(s7);
+            d1= df.parse("2022-05-21");
+            t1=sdf.parse("2022-05-21 13:00:00");
+            t2=sdf.parse("2022-05-21 14:00:00");
+            Slot s8 = new Slot(d1,t1,t2);
+            slots.add(s8);
 
 
+            slotRepository.saveAll(slots);
+
+        }
+        catch(ParseException e){
+            e.printStackTrace();
+        }
+
+    }
+    @Override
+    public void populateDoctorSlotTable(){
+        List<Doctor> doctors = doctorRepository.findAll();
+        List<Slot> slots = slotRepository.findAll();
+        for(Doctor d:doctors){
+            for (Slot s:slots){
+                DoctorSlot ds = new DoctorSlot();
+                ds.setIsOccupied(SlotStatus.FREE);
+                ds.setDoctor(d);
+                ds.setSlot(s);
+                doctorSlotRepository.save(ds);
+            }
+        }
+    }
 }
