@@ -46,9 +46,9 @@ public class PatientServiceTest {
         List<Appointment> appointments = new ArrayList<>();
         appointments.add(appointment);
         User user = new User();
-        Patient patientOne= new Patient(1,"John","Ray","Hyderabad","Male",0,null,new ArrayList<Appointment>());
-        Patient patientTwo =new Patient(2,"Mary","Jim","Pune,Maharastra","Female",0,user,appointments);
-        Patient patientThree= new Patient(3,"Ravi","Singh","New Delhi","Male",0,user,appointments);
+        Patient patientOne= new Patient(1,"John","Ray","Hyderabad","Male",0,null,new ArrayList<Appointment>(),24,24);
+        Patient patientTwo =new Patient(2,"Mary","Jim","Pune,Maharastra","Female",0,user,appointments,25,25);
+        Patient patientThree= new Patient(3,"Ravi","Singh","New Delhi","Male",0,user,appointments,25,25);
 
         patients.add(patientOne);
         patients.add(patientTwo);

@@ -24,7 +24,9 @@ public interface AppointmentService {
     public abstract List<DoctorSlot> getDoctorSlots();
     public abstract List<PreviousAppointmentDto> getPreviousAppointments(int patientId);
     public abstract void rescheduleAppointment(RescheduleDto rescheduleDto);
-    public abstract void cancelAppointment(AppointmentDto appointmentDto);
+    public abstract void cancelAppointment(RescheduleDto rescheduleDto);
+    public abstract List<PreviousAppointmentDto>getAllAppointmentsDto(int patientId);
+
 }
 // previous appointment
 // upcoming appointment

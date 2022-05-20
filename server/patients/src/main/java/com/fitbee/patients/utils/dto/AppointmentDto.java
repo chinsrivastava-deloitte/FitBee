@@ -12,11 +12,12 @@ import java.util.Date;
 public class AppointmentDto {
     private int doctorId;
     private int patientId;
-    @Temporal(TemporalType.DATE)
+    /*@Temporal(TemporalType.DATE)
     private Date date;
     @Temporal(TemporalType.TIMESTAMP)
     private Date startTime;
     @Temporal(TemporalType.TIMESTAMP)
-    private Date endTime;
+    private Date endTime;*/
+    private int slotId;
     private String type;
 }

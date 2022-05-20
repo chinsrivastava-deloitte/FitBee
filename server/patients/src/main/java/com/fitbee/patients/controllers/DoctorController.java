@@ -10,6 +10,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
+@CrossOrigin(value="*")
 public class DoctorController {
     @Autowired
     DoctorService doctorService;
@@ -70,6 +71,10 @@ public class DoctorController {
     public ResponseEntity<Object> checkoutPatient(@PathVariable int appointmentId){
         doctorService.appointmentCheckout(appointmentId);
         return new ResponseEntity<Object>("successfully checked out patient",HttpStatus.OK);
+    }
+    @GetMapping("/getDoctorSlots/{doctorId}")
+    public ResponseEntity<Object> getSlotsByDoctor(@PathVariable int doctorId){
+        return new ResponseEntity<Object>(doctorService.getDoctorSlot(doctorId),HttpStatus.OK);
     }
 
 }

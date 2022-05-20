@@ -16,6 +16,7 @@ import org.springframework.stereotype.Repository;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
+@CrossOrigin(value="*")
 public class PatientController {
     @Autowired
     PatientService patientService;
@@ -76,9 +77,9 @@ public class PatientController {
 //        return new ResponseEntity<>("appointment added",HttpStatus.CREATED);
 //    }
 
-    @GetMapping("/caseHistory/{patientName}")
-    public ResponseEntity<Object> getCaseHistory(@PathVariable("patientName") String patientName) {
-        return new ResponseEntity<>(patientService.getUserCaseHistory(patientName), HttpStatus.OK);
+    @GetMapping("/caseHistory/{patientId}")
+    public ResponseEntity<Object> getCaseHistory(@PathVariable("patientId") int  patientId) {
+        return new ResponseEntity<>(patientService.getUserCaseHistory(patientId), HttpStatus.OK);
     }
 
     @PostMapping("/addAppointments")
@@ -108,5 +109,10 @@ public class PatientController {
     @GetMapping("/getPreviousAppointments/{patientId}")
     public ResponseEntity<Object> getPreviousAppointment(@PathVariable int patientId) {
         return new ResponseEntity<>(appointmentService.getPreviousAppointments(patientId), HttpStatus.OK);
+    }
+
+    @GetMapping("/getAllAppointments/{patientId}")
+    public ResponseEntity<Object> getAllAppointmentList(@PathVariable int patientId){
+        return new ResponseEntity<>(appointmentService.getAllAppointmentsDto(patientId),HttpStatus.OK);
     }
 }

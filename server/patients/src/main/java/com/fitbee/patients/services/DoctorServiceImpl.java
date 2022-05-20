@@ -3,18 +3,24 @@ package com.fitbee.patients.services;
 import com.fitbee.patients.exceptions.IdNotFoundException;
 import com.fitbee.patients.models.Appointment;
 import com.fitbee.patients.models.Doctor;
+import com.fitbee.patients.models.DoctorSlot;
+import com.fitbee.patients.models.Slot;
 import com.fitbee.patients.models.enums.AppointmentEnum;
-import com.fitbee.patients.repositories.AppointmentRepository;
-import com.fitbee.patients.repositories.DoctorRepository;
-import com.fitbee.patients.repositories.PatientRepository;
+import com.fitbee.patients.models.enums.AppointmentType;
+import com.fitbee.patients.models.enums.SlotStatus;
+import com.fitbee.patients.repositories.*;
+import com.fitbee.patients.utils.dto.AppointmentSlots;
 import com.fitbee.patients.utils.dto.PrescriptionDto;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import javax.persistence.Id;
 import javax.print.Doc;
+import java.util.ArrayList;
 import java.util.Collection;
+import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service
 public class DoctorServiceImpl implements DoctorService{
@@ -26,6 +32,12 @@ public class DoctorServiceImpl implements DoctorService{
 
     @Autowired
     AppointmentRepository appointmentRepository;
+
+    @Autowired
+    DoctorSlotRepository doctorSlotRepository;
+
+    @Autowired
+    SlotRepository slotRepository;
 
     @Override
     public void createDoctor(Doctor doctor) {
@@ -90,6 +102,25 @@ public class DoctorServiceImpl implements DoctorService{
         Appointment appointment=appointmentRepository.getById(appointmentId);
         appointment.setAppointmentStatus(AppointmentEnum.COMPLETED);
         appointmentRepository.save(appointment);
+    }
+
+    @Override
+    public void setPatientStatus(int appointmentId,String status){
+        Appointment appointment= appointmentRepository.getById(appointmentId);
+        if(status.equalsIgnoreCase("Critical")){
+            appointment.setAppointmentType(AppointmentType.CRITICAL);
+        }
+        else{
+            appointment.setAppointmentType(AppointmentType.REGULAR);
+        }
+        appointmentRepository.save(appointment);
+    }
+
+    @Override
+    public List<AppointmentSlots> getDoctorSlot(int doctorId){
+        List<DoctorSlot> doctorSlots = doctorSlotRepository.findByDoctorDoctorId(doctorId);
+        List<AppointmentSlots>slots = doctorSlots.stream().map(slot->new AppointmentSlots(slot.getSlot(),slot.getIsOccupied())).collect(Collectors.toList());
+        return slots;
     }
 
 }

@@ -5,6 +5,7 @@ import com.fitbee.patients.models.Appointment;
 import com.fitbee.patients.models.Doctor;
 import com.fitbee.patients.models.Patient;
 import com.fitbee.patients.models.User;
+import com.fitbee.patients.models.enums.AppointmentEnum;
 import com.fitbee.patients.repositories.AppointmentRepository;
 import com.fitbee.patients.repositories.PatientRepository;
 import com.fitbee.patients.repositories.UserRepository;
@@ -40,6 +41,8 @@ public class PatientServiceImpl implements PatientService{
             patient.setGender(patientDto.getGender());
             patient.setFirstName(patientDto.getFirst_name());
             patient.setLastName(patientDto.getLast_name());
+            patient.setHeight(patientDto.getHeight());
+            patient.setWeight(patientDto.getWeight());
             patient.setAddress(patientDto.getAddress());
             patientRepository.save(patient);
 
@@ -74,10 +77,11 @@ public class PatientServiceImpl implements PatientService{
 
 
     @Override
-    public List<CaseHistoryDto> getUserCaseHistory(String firstName){
+    public List<CaseHistoryDto> getUserCaseHistory(int patientId){
 
-        List<Appointment>patientAppointments=patientRepository.findByFirstName(firstName).getAppointments();
-        return patientAppointments.stream().map(this::convertCaseHistoryDto).collect(Collectors.toList());
+        List<Appointment>patientAppointments=patientRepository.findById(patientId).get().getAppointments();
+        return patientAppointments.stream().filter(appointment->appointment.getAppointmentStatus()== AppointmentEnum.COMPLETED)
+                .map(this::convertCaseHistoryDto).collect(Collectors.toList());
 
     };
 
@@ -86,7 +90,7 @@ public class PatientServiceImpl implements PatientService{
         caseHistoryDto.setDoctorName(appointment.getDoctor().getName());
         caseHistoryDto.setDiagnosis(appointment.getDiagnosis());
         caseHistoryDto.setPrescription(appointment.getPrescription());
-        caseHistoryDto.setDate(appointment.getDate());
+        caseHistoryDto.setDate(appointment.getDoctorSlot().getSlot().getDate());
         return caseHistoryDto;
     }
     public int fetchPatientByUser(int userId){
@@ -102,6 +106,8 @@ public class PatientServiceImpl implements PatientService{
         patient.setLastName(patientDto.getLast_name());
         patient.setAddress(patientDto.getAddress());
         patient.setGender(patientDto.getGender());
+        patient.setHeight(patientDto.getHeight());
+        patient.setWeight(patientDto.getWeight());
         patient.setUser(userRepository.findByUserId((long)patientDto.getUserId()));
         patientRepository.save(patient);
 

@@ -1,5 +1,6 @@
 package com.fitbee.patients.services;
 
+import com.fitbee.patients.config.EmailConfig;
 import com.fitbee.patients.exceptions.DateException;
 import com.fitbee.patients.exceptions.IdNotFoundException;
 import com.fitbee.patients.models.*;
@@ -8,12 +9,20 @@ import com.fitbee.patients.models.enums.AppointmentType;
 import com.fitbee.patients.models.enums.SlotStatus;
 import com.fitbee.patients.repositories.*;
 import com.fitbee.patients.utils.dto.AppointmentDto;
+import com.fitbee.patients.utils.dto.CaseHistoryDto;
+import com.fitbee.patients.utils.dto.EmailDto;
 import com.fitbee.patients.utils.dto.PreviousAppointmentDto;
 import com.fitbee.patients.utils.dto.RescheduleDto;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.autoconfigure.AutoConfigureOrder;
+import org.springframework.mail.SimpleMailMessage;
+import org.springframework.mail.javamail.JavaMailSender;
+import org.springframework.mail.javamail.JavaMailSenderImpl;
+import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.stereotype.Service;
 
-
+import javax.mail.MessagingException;
+import javax.mail.internet.MimeMessage;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -36,6 +45,12 @@ public class AppointmentServiceImpl implements AppointmentService {
     PatientService patientService;
     @Autowired
     ApptRepository apptRepository;
+    @Autowired
+    EmailConfig emailConfig;
+    @Autowired
+    JavaMailSender javaMailSender;
+
+
 
     @Override
     public void addAppointment(AppointmentDto appointmentDto) throws IdNotFoundException, DateException {
@@ -51,16 +66,18 @@ public class AppointmentServiceImpl implements AppointmentService {
 //        if(appointmentDto.getDate().compareTo(java.time.LocalDate.now()){
 //            throw new DateException(" entered date must be more than current date");
 //        }
-        appointment.setDate(appointmentDto.getDate());
+       /* appointment.setDate(appointmentDto.getDate());
         appointment.setStartTime(appointmentDto.getStartTime());
-        appointment.setEndTime(appointmentDto.getEndTime());
+        appointment.setEndTime(appointmentDto.getEndTime());*/
         appointment.setAppointmentType(AppointmentType.REGULAR);
         appointment.setAppointmentStatus(AppointmentEnum.NOT_STARTED);
+        appointment.setDescription(appointmentDto.getType());
         appointmentRepository.save(appointment);
+        //sendMail(appointmentDto);
     }
     @Override
     public void addappointment(AppointmentDto appointmentDto){
-        Appt appt = new Appt();
+        /*Appt appt = new Appt();
         appt.setPatient(patientRepository.findById(appointmentDto.getPatientId()).get());
         Date d = appointmentDto.getDate();
         Date st = appointmentDto.getStartTime();
@@ -72,7 +89,21 @@ public class AppointmentServiceImpl implements AppointmentService {
         appt.setDoctorSlot(ds);
         ds.setIsOccupied(SlotStatus.OCCUPIED);
         doctorSlotRepository.save(ds);
-        apptRepository.save(appt);
+        apptRepository.save(appt);*/
+        Appointment appointment = new Appointment();
+        appointment.setPatient(patientRepository.findById(appointmentDto.getPatientId()).get());
+        Slot slot = slotRepository.findById(appointmentDto.getSlotId()).get();
+        Doctor doctor =doctorRepository.findById(appointmentDto.getDoctorId()).get();
+        DoctorSlot doctorSlot=doctorSlotRepository.findBySlotAndDoctor(slot,doctor);
+        appointment.setDoctorSlot(doctorSlot);
+        appointment.setDoctor(doctor);
+        doctorSlot.setIsOccupied(SlotStatus.OCCUPIED);
+        appointment.setAppointmentType(AppointmentType.REGULAR);
+        appointment.setAppointmentStatus(AppointmentEnum.NOT_STARTED);
+        appointment.setDescription(appointmentDto.getType());
+        doctorSlotRepository.save(doctorSlot);
+        appointmentRepository.save(appointment);
+       // sendMail(appointmentDto);
 
     }
     public List<Slot> getAllSlots(){
@@ -101,9 +132,10 @@ public class AppointmentServiceImpl implements AppointmentService {
             if (a.getAppointmentStatus() == AppointmentEnum.COMPLETED) {
                 PreviousAppointmentDto previousAppointmentDto = new PreviousAppointmentDto();
                 previousAppointmentDto.setDoctorName(a.getDoctor().getName());
-                previousAppointmentDto.setDate(a.getDate());
-                previousAppointmentDto.setTime(a.getStartTime());
-                previousAppointmentDto.setDescription(a.getAppointmentType());
+                previousAppointmentDto.setDate(a.getDoctorSlot().getSlot().getDate());
+                previousAppointmentDto.setTime(a.getDoctorSlot().getSlot().getFromTime());
+                //previousAppointmentDto.setDescription(a.getAppointmentType());
+                previousAppointmentDto.setDescription(a.getDescription());
                 previousAppointmentList.add(previousAppointmentDto);
             }
 
@@ -114,15 +146,63 @@ public class AppointmentServiceImpl implements AppointmentService {
 
     @Override
     public void rescheduleAppointment(RescheduleDto rescheduleDto) {
-        Appointment a = appointmentRepository.findById(rescheduleDto.getAppointmentId()).get();
+        /*Appointment a = appointmentRepository.findById(rescheduleDto.getAppointmentId()).get();
         a.setStartTime(rescheduleDto.getStartTime());
         a.setEndTime(rescheduleDto.getEndTime());
         a.setDate(rescheduleDto.getDate());
-        appointmentRepository.save(a);
+        appointmentRepository.save(a);*/
+
+        Appointment appointment= appointmentRepository.findById(rescheduleDto.getAppointmentId()).get();
+        Slot slot=slotRepository.findById(rescheduleDto.getSlotId()).get();
+        DoctorSlot doctorSlot= appointment.getDoctorSlot();
+        doctorSlot.setIsOccupied(SlotStatus.BLOCKED);
+        appointment.getDoctorSlot().setSlot(slot);
+        doctorSlotRepository.save(doctorSlot);
+        appointmentRepository.save(appointment);
+    }
+    @Override
+    public void cancelAppointment(RescheduleDto rescheduleDto) {
+        Appt appointment=apptRepository.findById(rescheduleDto.getAppointmentId()).get();
+        DoctorSlot doctorSlot = appointment.getDoctorSlot();
+        doctorSlot.setIsOccupied(SlotStatus.BLOCKED);
+        apptRepository.deleteById(appointment.getId());
+        doctorSlotRepository.save(doctorSlot);
     }
 
-    @Override
-    public void cancelAppointment(AppointmentDto appointmentDto) {
+    public List<PreviousAppointmentDto>getAllAppointmentsDto(int patientId){
+        List<Appointment> appointmentList = patientRepository.findById(patientId).get().getAppointments();
+        List<PreviousAppointmentDto> previousAppointmentList = new ArrayList<>();
+        for (Appointment a : appointmentList) {
+            PreviousAppointmentDto previousAppointmentDto = new PreviousAppointmentDto();
+            previousAppointmentDto.setDoctorName(a.getDoctor().getName());
+            previousAppointmentDto.setDate(a.getDoctorSlot().getSlot().getDate());
+            previousAppointmentDto.setTime(a.getDoctorSlot().getSlot().getFromTime());
+            previousAppointmentDto.setDescription(a.getDescription());
+            previousAppointmentDto.setAppointmentStatus(a.getAppointmentStatus());
+            previousAppointmentList.add(previousAppointmentDto);
 
+        }
+        return previousAppointmentList;
+    }
+
+    public void sendMail(AppointmentDto appointmentDto){
+        int patientId= appointmentDto.getPatientId();
+        EmailDto emailDto = new EmailDto();
+        emailDto.setEmail(patientRepository.findById(patientId).get().getUser().getEmail());
+        emailDto.setName(patientRepository.findById(patientId).get().getUser().getUserName());
+        Slot slot=slotRepository.findById(appointmentDto.getSlotId()).get();
+        emailDto.setMessageBody("This is to confirm that your appointment have been scheduled at "+slot.getDate()+" from "+slot.getFromTime()+" with "
+                                +doctorRepository.findById(appointmentDto.getDoctorId()).get().getName());
+        JavaMailSenderImpl mailSender = new JavaMailSenderImpl();
+        mailSender.setHost(emailConfig.getHost());
+        mailSender.setPort(emailConfig.getPort());
+        mailSender.setUsername(emailConfig.getUsername());
+        mailSender.setPassword(emailConfig.getPassword());
+
+        SimpleMailMessage mailMessage = new SimpleMailMessage();
+        mailMessage.setTo(emailDto.getEmail());
+        mailMessage.setSubject("Fitbee Appointment");
+        mailMessage.setText(emailDto.getMessageBody());
+        mailSender.send(mailMessage);
     }
 }

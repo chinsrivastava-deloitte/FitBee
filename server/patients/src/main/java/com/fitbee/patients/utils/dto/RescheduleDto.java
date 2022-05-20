@@ -11,4 +11,5 @@ public class RescheduleDto {
     private Date date;
     private Date startTime;
     private Date endTime;
+    private int slotId;
 }
